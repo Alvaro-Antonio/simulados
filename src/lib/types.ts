@@ -32,6 +32,8 @@ export interface ExamSummaryItem {
   createdAt: Date;
   updatedAt: Date;
   questionCount: number;
+  attemptsCount: number;
+  averagePercentage: number | null;
   latestAttempt: {
     id: string;
     totalScore: number;

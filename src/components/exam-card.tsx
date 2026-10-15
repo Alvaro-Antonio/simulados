@@ -168,24 +168,42 @@ export function ExamCard({ exam }: ExamCardProps) {
         {/* Seção Inferior: Último Desempenho e Botão Iniciar */}
         <div className="mt-6 border-t border-zinc-100 pt-4 dark:border-zinc-800">
           {latest ? (
-            <div className="mb-4 flex items-center justify-between rounded-xl bg-zinc-50 p-3 dark:bg-zinc-800/40">
-              <div className="flex items-center gap-2">
-                <Award className="h-4 w-4 text-indigo-500" />
-                <span className="text-xs text-zinc-600 dark:text-zinc-400">
-                  Última tentativa:
-                </span>
+            <div className="mb-4 rounded-xl border border-zinc-100 bg-zinc-50/80 p-3.5 space-y-2 dark:border-zinc-800 dark:bg-zinc-800/40">
+              {/* Linha 1: Última tentativa e seu percentual */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5 text-xs text-zinc-600 dark:text-zinc-400">
+                  <Award className="h-4 w-4 text-indigo-500" />
+                  <span>Último acerto:</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span
+                    className={`rounded-full border px-2 py-0.5 text-xs font-bold ${getScoreBadgeClass(
+                      latest.percentage
+                    )}`}
+                  >
+                    {latest.percentage}%
+                  </span>
+                  <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                    ({latest.totalScore}/{latest.totalQuestions})
+                  </span>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <span
-                  className={`rounded-full border px-2 py-0.5 text-xs font-bold ${getScoreBadgeClass(
-                    latest.percentage
-                  )}`}
-                >
-                  {latest.percentage}%
+
+              {/* Linha 2: Quantidade de tentativas e Média geral do simulado */}
+              <div className="flex items-center justify-between border-t border-zinc-200/60 pt-2 text-xs dark:border-zinc-700/60">
+                <span className="text-zinc-500 dark:text-zinc-400">
+                  {exam.attemptsCount}{' '}
+                  {exam.attemptsCount === 1 ? 'tentativa' : 'tentativas'} realizada
+                  {exam.attemptsCount === 1 ? '' : 's'}
                 </span>
-                <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                  ({latest.totalScore}/{latest.totalQuestions})
-                </span>
+                {exam.averagePercentage !== null && (
+                  <span className="font-semibold text-zinc-700 dark:text-zinc-300">
+                    Média:{' '}
+                    <strong className="text-indigo-600 dark:text-indigo-400">
+                      {exam.averagePercentage}%
+                    </strong>
+                  </span>
+                )}
               </div>
             </div>
           ) : (

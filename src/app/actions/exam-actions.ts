@@ -30,7 +30,6 @@ export async function getExams(): Promise<ExamSummaryItem[]> {
       },
       attempts: {
         orderBy: { startedAt: 'desc' },
-        take: 1,
         select: {
           id: true,
           totalScore: true,
@@ -42,7 +41,22 @@ export async function getExams(): Promise<ExamSummaryItem[]> {
   });
 
   return exams.map((exam) => {
-    const latest = exam.attempts[0];
+    const attempts = exam.attempts;
+    const attemptsCount = attempts.length;
+
+    let averagePercentage: number | null = null;
+    if (attemptsCount > 0) {
+      const sumPercentages = attempts.reduce((sum, att) => {
+        const pct =
+          att.totalQuestions > 0
+            ? (att.totalScore / att.totalQuestions) * 100
+            : 0;
+        return sum + pct;
+      }, 0);
+      averagePercentage = Math.round(sumPercentages / attemptsCount);
+    }
+
+    const latest = attempts[0];
     const latestAttempt = latest
       ? {
           id: latest.id,
@@ -64,6 +78,8 @@ export async function getExams(): Promise<ExamSummaryItem[]> {
       createdAt: exam.createdAt,
       updatedAt: exam.updatedAt,
       questionCount: exam._count.questions,
+      attemptsCount,
+      averagePercentage,
       latestAttempt,
     };
   });

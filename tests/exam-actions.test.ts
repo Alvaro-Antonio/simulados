@@ -175,3 +175,70 @@ test('Integration: Question Bank - takes a subset of questions (e.g. 2 out of 4)
 
   await deleteExamAction(examId);
 });
+
+test('Integration: calculates attempt count, average score, and latest score in getExams', async () => {
+  const { getExams } = await import('../src/app/actions/exam-actions');
+
+  const examInput = {
+    title: 'Simulado de Teste de Médias',
+    category: 'Estatísticas',
+    description: 'Validação de média e última tentativa',
+    questions: [
+      {
+        statement: 'Questão 1',
+        type: 'MULTIPLE_CHOICE' as const,
+        orderIndex: 0,
+        options: [
+          { text: 'Correta', isCorrect: true, orderIndex: 0 },
+          { text: 'Incorreta', isCorrect: false, orderIndex: 1 },
+        ],
+      },
+      {
+        statement: 'Questão 2',
+        type: 'MULTIPLE_CHOICE' as const,
+        orderIndex: 1,
+        options: [
+          { text: 'Correta', isCorrect: true, orderIndex: 0 },
+          { text: 'Incorreta', isCorrect: false, orderIndex: 1 },
+        ],
+      },
+    ],
+  };
+
+  const createRes = await saveExamAction(examInput);
+  assert.equal(createRes.success, true);
+  const examId = createRes.examId!;
+
+  const examDb = await prisma.exam.findUnique({
+    where: { id: examId },
+    include: { questions: { include: { options: true } } },
+  });
+
+  const q1 = examDb!.questions[0];
+  const q2 = examDb!.questions[1];
+
+  const q1Correct = q1.options.find((o) => o.isCorrect)!.id;
+  const q1Incorrect = q1.options.find((o) => !o.isCorrect)!.id;
+  const q2Correct = q2.options.find((o) => o.isCorrect)!.id;
+
+  // Tentativa 1: 1 correta, 1 errada = 50%
+  await submitExamAttemptAction(examId, {
+    [q1.id]: q1Incorrect,
+    [q2.id]: q2Correct,
+  });
+
+  // Tentativa 2: 2 corretas = 100%
+  await submitExamAttemptAction(examId, {
+    [q1.id]: q1Correct,
+    [q2.id]: q2Correct,
+  });
+
+  const exams = await getExams();
+  const target = exams.find((e) => e.id === examId);
+  assert.ok(target);
+  assert.equal(target.attemptsCount, 2, 'Should have 2 attempts');
+  assert.equal(target.averagePercentage, 75, 'Average of 50 and 100 should be 75%');
+  assert.equal(target.latestAttempt?.percentage, 100, 'Latest attempt should be 100%');
+
+  await deleteExamAction(examId);
+});
