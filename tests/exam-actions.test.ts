@@ -88,3 +88,90 @@ test('Integration: creates exam, executes attempt, calculates score and cleans u
   const deletedExam = await prisma.exam.findUnique({ where: { id: examId } });
   assert.equal(deletedExam, null);
 });
+
+test('Integration: Question Bank - takes a subset of questions (e.g. 2 out of 4) and scores against the subset', async () => {
+  const examInput = {
+    title: 'Banco de 4 Questões',
+    category: 'Matemática',
+    description: 'Banco com várias questões para testar subconjuntos',
+    questions: [
+      {
+        statement: 'Quanto é 1 + 1?',
+        type: 'MULTIPLE_CHOICE' as const,
+        explanation: '1+1=2',
+        orderIndex: 0,
+        options: [
+          { text: '2', isCorrect: true, orderIndex: 0 },
+          { text: '3', isCorrect: false, orderIndex: 1 },
+        ],
+      },
+      {
+        statement: 'Quanto é 2 + 2?',
+        type: 'MULTIPLE_CHOICE' as const,
+        explanation: '2+2=4',
+        orderIndex: 1,
+        options: [
+          { text: '4', isCorrect: true, orderIndex: 0 },
+          { text: '5', isCorrect: false, orderIndex: 1 },
+        ],
+      },
+      {
+        statement: 'Quanto é 3 + 3?',
+        type: 'MULTIPLE_CHOICE' as const,
+        explanation: '3+3=6',
+        orderIndex: 2,
+        options: [
+          { text: '6', isCorrect: true, orderIndex: 0 },
+          { text: '7', isCorrect: false, orderIndex: 1 },
+        ],
+      },
+      {
+        statement: 'Quanto é 4 + 4?',
+        type: 'MULTIPLE_CHOICE' as const,
+        explanation: '4+4=8',
+        orderIndex: 3,
+        options: [
+          { text: '8', isCorrect: true, orderIndex: 0 },
+          { text: '9', isCorrect: false, orderIndex: 1 },
+        ],
+      },
+    ],
+  };
+
+  const createRes = await saveExamAction(examInput);
+  assert.equal(createRes.success, true);
+  const examId = createRes.examId!;
+
+  // Import getExamForPlay dynamically to test option subset
+  const { getExamForPlay } = await import('../src/app/actions/exam-actions');
+  const playData = await getExamForPlay(examId, { limit: 2, shuffle: false });
+  assert.ok(playData);
+  assert.equal(playData.questions.length, 2, 'Should only return 2 questions out of 4');
+
+  const selectedQIds = playData.questions.map((q) => q.id);
+
+  // Fetch full details of these 2 questions to get correct option ids
+  const examDb = await prisma.exam.findUnique({
+    where: { id: examId },
+    include: { questions: { include: { options: true } } },
+  });
+
+  const answers: Record<string, string> = {};
+  for (const qId of selectedQIds) {
+    const fullQ = examDb!.questions.find((q) => q.id === qId)!;
+    const correctOpt = fullQ.options.find((o) => o.isCorrect)!;
+    answers[qId] = correctOpt.id;
+  }
+
+  // Submit attempt passing selectedQIds
+  const submitRes = await submitExamAttemptAction(examId, answers, selectedQIds);
+  assert.equal(submitRes.success, true);
+
+  const result = await getAttemptResult(submitRes.attemptId!);
+  assert.ok(result);
+  assert.equal(result.totalQuestions, 2, 'Total questions evaluated must be 2, not 4');
+  assert.equal(result.totalScore, 2, 'Score must be 2');
+  assert.equal(result.percentage, 100, 'Percentage must be 100%');
+
+  await deleteExamAction(examId);
+});

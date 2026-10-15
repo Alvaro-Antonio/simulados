@@ -91,9 +91,25 @@ export async function getExamForEdit(id: string) {
 }
 
 /**
- * Obtém dados para realização do simulado (omitindo isCorrect das opções para segurança).
+ * Embaralha um array usando o algoritmo Fisher-Yates.
  */
-export async function getExamForPlay(id: string) {
+function shuffleArray<T>(array: T[]): T[] {
+  const copy = [...array];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+/**
+ * Obtém dados para realização do simulado (omitindo isCorrect das opções para segurança).
+ * Permite limitar a quantidade de questões do banco e embaralhar opcionalmente.
+ */
+export async function getExamForPlay(
+  id: string,
+  options?: { limit?: number; shuffle?: boolean }
+) {
   const exam = await prisma.exam.findUnique({
     where: { id },
     select: {
@@ -121,7 +137,28 @@ export async function getExamForPlay(id: string) {
     },
   });
 
-  return exam;
+  if (!exam) return null;
+
+  let selectedQuestions = [...exam.questions];
+
+  if (options?.shuffle) {
+    selectedQuestions = shuffleArray(selectedQuestions);
+  }
+
+  if (options?.limit && options.limit > 0 && options.limit < selectedQuestions.length) {
+    selectedQuestions = selectedQuestions.slice(0, options.limit);
+  }
+
+  selectedQuestions = selectedQuestions.map((q, idx) => ({
+    ...q,
+    orderIndex: idx,
+  }));
+
+  return {
+    ...exam,
+    totalBankQuestions: exam.questions.length,
+    questions: selectedQuestions,
+  };
 }
 
 /**
@@ -237,7 +274,8 @@ export async function deleteExamAction(
  */
 export async function submitExamAttemptAction(
   examId: string,
-  answers: Record<string, string> // questionId -> selectedOptionId
+  answers: Record<string, string>, // questionId -> selectedOptionId
+  questionIds?: string[]
 ): Promise<{ success: boolean; attemptId?: string; error?: string }> {
   try {
     const exam = await prisma.exam.findUnique({
@@ -256,7 +294,14 @@ export async function submitExamAttemptAction(
       return { success: false, error: 'Simulado não encontrado ou sem questões.' };
     }
 
-    const { score, total, answersDetail } = calculateScore(exam.questions, answers);
+    let questionsToEvaluate = exam.questions;
+    if (questionIds && questionIds.length > 0) {
+      questionsToEvaluate = questionIds
+        .map((id) => exam.questions.find((q) => q.id === id))
+        .filter((q): q is (typeof exam.questions)[number] => q !== undefined);
+    }
+
+    const { score, total, answersDetail } = calculateScore(questionsToEvaluate, answers);
 
     const attempt = await prisma.$transaction(async (tx) => {
       const createdAttempt = await tx.examAttempt.create({

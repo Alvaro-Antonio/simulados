@@ -23,6 +23,7 @@ interface ExamPlayerProps {
     title: string;
     category: string | null;
     description: string | null;
+    totalBankQuestions?: number;
     questions: {
       id: string;
       statement: string;
@@ -75,7 +76,7 @@ export function ExamPlayer({ exam }: ExamPlayerProps) {
   const handleFinishExam = () => {
     setErrorMsg(null);
     startTransition(async () => {
-      const res = await submitExamAttemptAction(exam.id, answers);
+      const res = await submitExamAttemptAction(exam.id, answers, questionIds);
       if (!res.success || !res.attemptId) {
         setErrorMsg(res.error || 'Erro ao processar respostas.');
       } else {
@@ -113,9 +114,16 @@ export function ExamPlayer({ exam }: ExamPlayerProps) {
             <ArrowLeft className="h-5 w-5" />
           </Link>
           <div>
-            <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400">
-              {exam.category || 'Simulado'}
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400">
+                {exam.category || 'Simulado'}
+              </span>
+              {exam.totalBankQuestions && exam.totalBankQuestions > totalQuestions && (
+                <span className="rounded-md bg-amber-50 px-2 py-0.5 text-[10px] font-semibold text-amber-700 dark:bg-amber-950/50 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                  {totalQuestions} de {exam.totalBankQuestions} do banco
+                </span>
+              )}
+            </div>
             <h1 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
               {exam.title}
             </h1>
