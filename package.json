@@ -10,7 +10,8 @@
     "test": "tsx --test tests/*.test.ts",
     "db:up": "docker start simulados_postgres 2>/dev/null || docker run -d --name simulados_postgres -p 5433:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=simulados_db -v postgres_simulados_data:/var/lib/postgresql/data --restart unless-stopped postgres:17",
     "db:down": "docker stop simulados_postgres",
-    "db:seed": "npx prisma db seed"
+    "db:seed": "npx prisma db seed",
+    "db:seed:outsystems": "tsx prisma/seed-outsystems.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

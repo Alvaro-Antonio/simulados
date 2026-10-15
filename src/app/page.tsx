@@ -10,6 +10,8 @@ import {
 import { getExams } from '@/app/actions/exam-actions';
 import { ExamCard } from '@/components/exam-card';
 
+export const revalidate = 0;
+
 export default async function DashboardPage() {
   const exams = await getExams();
 
