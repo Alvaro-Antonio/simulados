@@ -1,101 +1,133 @@
-# Sistema Pessoal de Simulados 📚
+# Sistema Pessoal de Simulados 📚📱
 
-Sistema web moderno e monolítico construído com **Next.js (App Router)** e **Prisma ORM**, integrado a um banco de dados **PostgreSQL** rodando em container Docker. Desenvolvido para uso pessoal e estudos, sem necessidade de login.
+> 🤖 **Desenvolvimento com Agente de IA:**  
+> Esta aplicação (Web Full-Stack e Aplicativo Mobile Flutter) foi concebida, arquitetada, desenvolvida e iterada com o suporte integral de um **Agente Autônomo de Inteligência Artificial** ([Antigravity](https://deepmind.google/)). Toda a estruturação de banco de dados, regras de negócio, suíte de testes e interfaces responsivas foram construídas em conjunto com o agente.
+
+Sistema completo para criação, realização, acompanhamento estatístico e resolução de simulados para concursos, vestibulares e certificações profissionais (incluindo suporte nativo ao simulado preparatório de **OutSystems O11**).
+
+O ecossistema é composto por:
+1. **Aplicação Web**: Desenvolvida em **Next.js (App Router)**, **TypeScript**, **Tailwind CSS v4**, **Prisma ORM** e **PostgreSQL 17** em Docker.
+2. **Aplicativo Mobile**: Desenvolvido em **Flutter 3.44+**, **Dart**, **SQLite** nativo (`sqflite`), **Provider/ChangeNotifier** e design **Material 3**.
 
 ---
 
 ## ✨ Principais Funcionalidades
 
-- **Sem necessidade de Login**: Acesso imediato para focar 100% no estudo.
-- **Dois Formatos de Questão Suportados**:
-  - **Múltipla Escolha**: 4 a 5 alternativas com exatamente 1 correta.
-  - **Certo / Errado (Estilo Cebraspe)**: Botões dedicados para julgamento rápido.
-- **Gabarito Comentado**: Campo para justificativa e embasamento teórico de cada questão, exibido na tela de revisão pós-prova.
-- **Importação Rápida em Lote (IA / ChatGPT)**:
-  - Botão para copiar um **Prompt Modelo** pronto para colar no ChatGPT ou outra IA.
-  - Validador em tempo real de JSON, aceitando código markdown colado diretamente (` ```json ... ``` `).
-- **Ambiente de Prova Interativo**:
-  - Barra de progresso dinâmica em tempo real.
-  - Navegador rápido de questões (grade numérica) para saltar entre questões e ver pendências.
-  - Modal de confirmação inteligente alertando caso haja questões sem resposta marcada.
-- **Cálculo de Acertos & Revisão Detalhada**:
-  - Placar geral com percentual de aproveitamento, total de acertos e erros.
-  - Revisão questão a questão destacando:
-    - Sua resposta em verde (se acertou) ou vermelho (se errou).
-    - Alternativa correta destacada.
-    - Comentário/justificativa pedagógica do gabarito.
-- **Histórico**: Acompanhamento do último resultado de cada simulado no painel inicial.
+### 📁 1. Organização em Pastas e Agrupamentos
+- **Criação de Pastas Temáticas**: Organize seus simulados em pastas (ex: *"Concurso Professor Municipal"*, *"Certificação OutSystems"*, *"OAB"*, etc.).
+- **Mover Simulados**: Alterne o destino de um simulado entre pastas ou mantenha-o solto na raiz.
+- **Fixação no Topo (Pinning)**: Fixe pastas prioritárias ou simulados favoritos no topo do dashboard para acesso instantâneo.
+- **Identidade Visual por Simulado**: Escolha um ícone e paleta temática exclusiva para cada simulado.
+
+### 📊 2. Dashboard Inteligente e Métricas
+- **Estatísticas Essenciais sem Poluição**: Visualize em cada card:
+  - **Última Nota / Aproveitamento** com indicador de status (Excelente, Bom, Atenção).
+  - **Tamanho do Banco de Questões**: Total de questões cadastradas.
+  - **Total de Tentativas** e **Média Geral de Acertos**.
+  - **Tempo de Duração**: Cronometragem e histórico de tempo gasto em cada tentativa.
+
+### 🤖 3. Gerador e Importador de Questões com IA (ChatGPT / Gemini / Claude)
+- **Gerador de Prompts Especializados**: Cria automaticamente o prompt ideal para a IA gerar questões inéditas, didáticas e fundamentadas:
+  - Estilos suportados: Múltipla Escolha (4 ou 5 opções), Certo/Errado (Estilo Cebraspe) e Modo Misto.
+  - Controle de quantidade: 5, 10, 15, 20 ou mais questões.
+  - Suporte a **adição de novas questões** (`append`) a simulados já existentes.
+- **Processamento Assíncrono em Segundo Plano**:
+  - Ao clicar em *"Processar e Adicionar questões"*, o sistema valida estritamente a sintaxe do JSON.
+  - Se válido, o modal fecha instantaneamente e a tarefa é processada em segundo plano com um **indicador visual animado na AppBar**.
+  - Se inválido, o modal permanece aberto com o diagnóstico claro do erro para correção.
+- **Sanitização Tolerante a Falhas de LLMs**:
+  - Função nativa `fixInvalidBackslashes` que resolve escapes inválidos do Google Gemini (`\d`, `\s`, LaTeX `\alpha`, `\{`, caminhos `C:\`).
+  - Tratamento automático para o aplicativo mobile do ChatGPT, que costuma copiar colchetes escapados (`\[` e `\]`), restaurando a conformidade com o padrão JSON (RFC 8259).
+
+### 📝 4. Ambiente de Prova e Revisão Pedagógica
+- **Sorteio e Banco de Questões**: Possibilidade de configurar o número de questões a responder (ex: resolver 20 de um banco de 100).
+- **Cronômetro Interativo**: Medição precisa de tempo com funcionalidade de pausa e retomada.
+- **Navegador Rápido de Questões**: Grade numérica para saltar diretamente para qualquer questão e visualizar pendências.
+- **Gabarito Comentado e Revisão Detalhada**: Tela pós-prova destacando a resposta escolhida, a resposta correta e a justificativa técnica detalhada.
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
+### Web (Next.js)
 - **Framework**: [Next.js 15+](https://nextjs.org/) (App Router, Server Actions, React 19)
 - **Linguagem**: TypeScript (Strict Mode)
 - **Banco de Dados**: PostgreSQL 17 (via Docker na porta `5433`)
-- **ORM**: [Prisma ORM](https://www.prisma.io/) (com migrações atômicas e client tipado)
-- **Estilização**: Tailwind CSS v4
-- **Ícones**: Lucide React
+- **ORM**: [Prisma ORM](https://www.prisma.io/)
+- **Estilização**: Tailwind CSS v4 & Lucide React
 - **Validação**: Zod
+
+### Mobile (Flutter)
+- **Framework**: [Flutter 3.44+](https://flutter.dev/) (Channel Stable)
+- **Linguagem**: Dart 3.12+ (Null-safety rigoroso)
+- **Persistência**: SQLite nativo via `sqflite` com inicialização e migrações atômicas
+- **Gerenciamento de Estado**: Provider & ChangeNotifier
+- **Design System**: Material Design 3 com suporte a Light & Dark Mode
 
 ---
 
 ## 🚀 Como Executar o Projeto
 
-### 1. Pré-requisitos
-
-- **Node.js**: Versão `v24.21.0` (recomendado gerenciar via [NVM](https://github.com/nvm-sh/nvm))
+### Pré-requisitos
+- **Node.js**: `v24.21.0` (gerenciado via [NVM](https://github.com/nvm-sh/nvm))
 - **Docker**: Docker Engine ou Docker Desktop
-
-### 2. Subir o Banco de Dados PostgreSQL no Docker
-
-O banco roda na porta `5433` mapeada para o host (evitando conflito com outros serviços postgres na porta padrão 5432):
-
-```bash
-# Iniciar o container PostgreSQL
-npm run db:up
-
-# Ou usando docker compose se preferir:
-docker compose up -d
-```
-
-### 3. Configurar Node e Instalar Dependências
-
-```bash
-# Ativar versão correta do Node
-nvm use 24.21.0
-
-# Instalar dependências
-npm install
-```
-
-### 4. Executar Migrações e Popular Simulado Inicial (Seed)
-
-```bash
-# Cria as tabelas no PostgreSQL
-npx prisma migrate dev
-
-# Popula um simulado modelo completo (Múltipla Escolha e Cebraspe com gabaritos comentados)
-npm run db:seed
-```
-
-### 5. Iniciar o Servidor de Desenvolvimento
-
-```bash
-npm run dev
-```
-
-Acesse [http://localhost:3000](http://localhost:3000) no seu navegador.
+- **Flutter**: Flutter SDK 3.44+ e Android SDK configurados
 
 ---
 
-## 🧪 Testes Automatizados
+### Executando a Aplicação Web
 
-O projeto possui suíte de testes de unidade e integração cobrindo regras de validação, cálculos de pontuação, persistência atômica e exclusão em cascata:
+1. **Subir o Banco de Dados PostgreSQL no Docker**:
+   ```bash
+   npm run db:up
+   ```
 
-```bash
-npm test
-```
+2. **Ativar versão do Node e Instalar Dependências**:
+   ```bash
+   nvm use 24.21.0
+   npm install
+   ```
+
+3. **Rodar Migrações do Prisma e Popular Dados (Seed)**:
+   ```bash
+   npx prisma migrate dev
+   npm run db:seed
+   ```
+
+4. **Iniciar o Servidor Web**:
+   ```bash
+   npm run dev
+   ```
+   Acesse [http://localhost:3000](http://localhost:3000).
+
+5. **Rodar Testes da Web**:
+   ```bash
+   npm test
+   ```
+
+---
+
+### Executando o Aplicativo Mobile (Flutter)
+
+1. **Acessar a pasta do app**:
+   ```bash
+   cd simulados_app
+   ```
+
+2. **Instalar dependências**:
+   ```bash
+   flutter pub get
+   ```
+
+3. **Executar no dispositivo ou emulador**:
+   ```bash
+   flutter run
+   ```
+
+4. **Rodar Testes do Flutter**:
+   ```bash
+   flutter test
+   ```
 
 ---
 
@@ -104,37 +136,28 @@ npm test
 ```text
 simulados/
 ├── prisma/
-│   ├── schema.prisma         # Modelagem relacional do banco de dados
-│   ├── seed.ts               # Script para popular dados de demonstração
-│   └── migrations/           # Histórico de migrações SQL
+│   ├── schema.prisma               # Modelagem do banco (Exam, Folder, Question, Option, Attempt)
+│   ├── seed.ts                     # Script de seed inicial
+│   └── seed-outsystems.ts          # Simulado OutSystems O11
 ├── src/
 │   ├── app/
-│   │   ├── actions/          # Server Actions (CRUD, submissão de respostas, cálculos)
-│   │   ├── exams/
-│   │   │   ├── new/          # Criação de simulado
-│   │   │   ├── [id]/edit/    # Edição de simulado existente
-│   │   │   ├── [id]/play/    # Interface de realização da prova
-│   │   │   └── [id]/results/ # Tela de placar de acertos e gabarito comentado
-│   │   ├── layout.tsx        # Layout raiz com Navbar e tipografia
-│   │   └── page.tsx          # Painel principal (dashboard)
-│   ├── components/
-│   │   ├── navbar.tsx        # Barra de navegação
-│   │   ├── exam-card.tsx     # Cartão de simulado com ações e última pontuação
-│   │   ├── exam-form/        # Formulário interativo e modal de importação em lote
-│   │   ├── exam-player/      # Execução da prova e navegador de questões
-│   │   └── exam-results/     # Placar e revisão comentada questão a questão
-│   └── lib/
-│       ├── prisma.ts         # Singleton do Prisma Client
-│       ├── types.ts          # Tipos e DTOs TypeScript
-│       └── validations/      # Schemas Zod e funções puras de pontuação
-├── docker-compose.yml        # Configuração do PostgreSQL 17
-├── .nvmrc                    # Versão obrigatória do Node (24.21.0)
-└── tests/                    # Suíte de testes de integração e domínio
+│   │   ├── actions/                # Server Actions (CRUD de simulados, pastas, tentativas)
+│   │   ├── exams/                  # Telas de novo, edição, realização e resultados
+│   │   └── page.tsx                # Dashboard principal web
+│   ├── components/                 # Componentes React (Navbar, ExamCard, FolderBar, Timer)
+│   └── lib/                        # Tipagens, validações Zod e singleton Prisma
+├── simulados_app/                  # 📱 Aplicativo Mobile Flutter
+│   ├── lib/
+│   │   ├── data/                   # SQLite database, repositórios e seed
+│   │   ├── domain/models/          # Modelos de domínio (Exam, Question, Folder, Attempt)
+│   │   └── ui/                     # UI dividida por features (dashboard, exam_form, player, results)
+│   └── test/                       # Testes de unidade e widgets do app
+├── docs/                           # Documentação técnica detalhada
+└── tests/                          # Testes de integração da aplicação Web
 ```
 
 ---
 
-## 💡 Dica: Gerando Questões com ChatGPT
+## 📄 Licença e Uso
 
-Ao criar ou editar um simulado, clique no botão **"Importar em Lote (JSON / IA)"**.  
-Você pode clicar em **"Copiar Prompt para ChatGPT"** para gerar dezenas de questões formatadas automaticamente com justificativas prontas para colar no sistema.
+Projeto desenvolvido para fins de estudos, autoavaliação e preparação técnica.
