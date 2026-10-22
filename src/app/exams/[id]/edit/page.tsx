@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getExamForEdit } from '@/app/actions/exam-actions';
+import { getExamForEdit, getFolders } from '@/app/actions/exam-actions';
 import { ExamForm } from '@/components/exam-form/exam-form';
 import { QuestionInput } from '@/lib/validations/exam';
 
@@ -13,7 +13,10 @@ export const metadata = {
 
 export default async function EditExamPage({ params }: EditExamPageProps) {
   const { id } = await params;
-  const exam = await getExamForEdit(id);
+  const [exam, folders] = await Promise.all([
+    getExamForEdit(id),
+    getFolders(),
+  ]);
 
   if (!exam) {
     notFound();
@@ -24,6 +27,10 @@ export default async function EditExamPage({ params }: EditExamPageProps) {
     title: exam.title,
     description: exam.description,
     category: exam.category,
+    folderId: exam.folderId,
+    isPinned: exam.isPinned,
+    icon: exam.icon,
+    imageUrl: exam.imageUrl,
     questions: exam.questions.map((q): QuestionInput => ({
       id: q.id,
       statement: q.statement,
@@ -39,5 +46,5 @@ export default async function EditExamPage({ params }: EditExamPageProps) {
     })),
   };
 
-  return <ExamForm initialData={initialData} />;
+  return <ExamForm initialData={initialData} availableFolders={folders} />;
 }

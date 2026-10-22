@@ -3,19 +3,19 @@ import {
   PlusCircle,
   BookOpen,
   CheckSquare2,
-  HelpCircle,
-  GraduationCap,
   TrendingUp,
   Award,
-  Layers,
 } from 'lucide-react';
-import { getExams } from '@/app/actions/exam-actions';
-import { ExamCard } from '@/components/exam-card';
+import { getExams, getFolders } from '@/app/actions/exam-actions';
+import { DashboardClient } from '@/components/dashboard-client';
 
 export const revalidate = 0;
 
 export default async function DashboardPage() {
-  const exams = await getExams();
+  const [exams, folders] = await Promise.all([
+    getExams(),
+    getFolders(),
+  ]);
 
   const totalExams = exams.length;
   const totalQuestions = exams.reduce((acc, curr) => acc + curr.questionCount, 0);
@@ -54,7 +54,7 @@ export default async function DashboardPage() {
             Painel de Simulados
           </h1>
           <p className="mt-2 text-base text-zinc-600 dark:text-zinc-400">
-            Gerencie seus testes, treine com questões e acompanhe sua evolução com métricas detalhadas.
+            Gerencie seus testes, organize em pastas, fixe no topo e acompanhe sua evolução.
           </p>
         </div>
 
@@ -137,46 +137,8 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      {/* Grid de Simulados ou Estado Vazio */}
-      <section className="mt-10">
-        <div className="flex items-center justify-between pb-4">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
-            Seus Simulados
-          </h2>
-          <span className="text-xs text-zinc-500 dark:text-zinc-400">
-            {totalExams} disponíveis
-          </span>
-        </div>
-
-        {exams.length > 0 ? (
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {exams.map((exam) => (
-              <ExamCard key={exam.id} exam={exam} />
-            ))}
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-zinc-300 bg-white p-12 text-center dark:border-zinc-800 dark:bg-zinc-900/30">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600 dark:bg-indigo-950/60 dark:text-indigo-400">
-              <GraduationCap className="h-8 w-8" />
-            </div>
-            <h3 className="mt-4 text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-              Nenhum simulado cadastrado ainda
-            </h3>
-            <p className="mt-2 max-w-md text-sm text-zinc-500 dark:text-zinc-400">
-              Comece criando seu primeiro simulado com perguntas de múltipla escolha ou Certo/Errado para testar seus conhecimentos.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3 justify-center">
-              <Link
-                href="/exams/new"
-                className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-indigo-500"
-              >
-                <PlusCircle className="h-4 w-4" />
-                <span>Criar Primeiro Simulado</span>
-              </Link>
-            </div>
-          </div>
-        )}
-      </section>
+      {/* Navegação de Pastas e Lista de Simulados */}
+      <DashboardClient initialExams={exams} folders={folders} />
     </div>
   );
 }

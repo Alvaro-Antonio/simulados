@@ -1,4 +1,5 @@
 import { PrismaClient, QuestionType } from '@prisma/client';
+import { extraQuestionsData } from './extra-questions-outsystems';
 
 const prisma = new PrismaClient();
 
@@ -1259,32 +1260,76 @@ const questionsData: RawQuestion[] = [
 ];
 
 async function seedOutSystems() {
-  console.log(`Iniciando importação do Banco de Questões OutSystems O11 (${questionsData.length} questões)...`);
+  const allQuestions = [...questionsData, ...extraQuestionsData];
+  console.log(`Iniciando processamento do Banco de Questões OutSystems O11 (${allQuestions.length} questões)...`);
 
-  // Verifica se o simulado já existe para atualizar ou criar novo
-  const existingExam = await prisma.exam.findFirst({
+  let exam = await prisma.exam.findFirst({
     where: {
       title: 'Certificação OutSystems Associate Developer O11 - Banco Avançado',
     },
+    include: {
+      questions: {
+        select: { id: true, statement: true },
+      },
+    },
   });
 
-  if (existingExam) {
-    console.log(`Simulado existente encontrado (ID: ${existingExam.id}). Atualizando questões...`);
-    await prisma.exam.delete({ where: { id: existingExam.id } });
+  const description =
+    'Banco completo com 150 questões avançadas de Múltipla Escolha e Certo/Errado baseadas na certificação OutSystems Associate Reactive Developer O11, contendo pegadinhas clássicas de prova e gabarito comentado.';
+
+  if (!exam) {
+    console.log('Criando novo simulado...');
+    exam = await prisma.exam.create({
+      data: {
+        title: 'Certificação OutSystems Associate Developer O11 - Banco Avançado',
+        category: 'OutSystems O11',
+        description,
+        questions: {
+          create: allQuestions.map((q, qIdx) => ({
+            statement: q.statement,
+            type: q.type,
+            explanation: q.explanation,
+            orderIndex: qIdx,
+            options: {
+              create: q.options.map((opt, optIdx) => ({
+                text: opt.text,
+                isCorrect: opt.isCorrect,
+                orderIndex: optIdx,
+              })),
+            },
+          })),
+        },
+      },
+      include: {
+        questions: {
+          select: { id: true, statement: true },
+        },
+      },
+    });
+    console.log(`✅ Simulado criado com ${exam.questions.length} questões.`);
+    return;
   }
 
-  const createdExam = await prisma.exam.create({
-    data: {
-      title: 'Certificação OutSystems Associate Developer O11 - Banco Avançado',
-      category: 'OutSystems O11',
-      description:
-        'Banco completo com 100 questões avançadas de Múltipla Escolha e Certo/Errado baseadas na certificação OutSystems Associate Reactive Developer O11, contendo pegadinhas clássicas de prova e gabarito comentado.',
-      questions: {
-        create: questionsData.map((q, qIdx) => ({
+  console.log(`Simulado existente encontrado (ID: ${exam.id}). Atualizando dados e adicionando novas questões...`);
+
+  await prisma.exam.update({
+    where: { id: exam.id },
+    data: { description },
+  });
+
+  const existingStatements = new Set(exam.questions.map((q) => q.statement));
+  let addedCount = 0;
+
+  for (let i = 0; i < allQuestions.length; i++) {
+    const q = allQuestions[i];
+    if (!existingStatements.has(q.statement)) {
+      await prisma.question.create({
+        data: {
+          examId: exam.id,
           statement: q.statement,
           type: q.type,
           explanation: q.explanation,
-          orderIndex: qIdx,
+          orderIndex: i,
           options: {
             create: q.options.map((opt, optIdx) => ({
               text: opt.text,
@@ -1292,14 +1337,21 @@ async function seedOutSystems() {
               orderIndex: optIdx,
             })),
           },
-        })),
-      },
-    },
+        },
+      });
+      existingStatements.add(q.statement);
+      addedCount++;
+    }
+  }
+
+  const totalQuestions = await prisma.question.count({
+    where: { examId: exam.id },
   });
 
-  console.log(`✅ Banco de Questões OutSystems O11 importado com sucesso!`);
-  console.log(`ID: ${createdExam.id}`);
-  console.log(`Total de Questões cadastradas: ${questionsData.length}`);
+  console.log(`✅ Banco de Questões OutSystems O11 atualizado com sucesso!`);
+  console.log(`ID: ${exam.id}`);
+  console.log(`Novas questões adicionadas: ${addedCount}`);
+  console.log(`Total de Questões cadastradas no simulado: ${totalQuestions}`);
 }
 
 seedOutSystems()

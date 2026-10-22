@@ -18,16 +18,35 @@ import { QuestionItem } from './question-item';
 import { BulkImportModal } from './bulk-import-modal';
 
 interface ExamFormProps {
-  initialData?: ExamInput & { id?: string };
+  initialData?: Omit<ExamInput, 'questions'> & {
+    id?: string;
+    questions?: QuestionInput[];
+  };
+  availableFolders?: { id: string; name: string }[];
 }
 
-export function ExamForm({ initialData }: ExamFormProps) {
+const PRESET_ICONS = [
+  { id: 'graduation-cap', label: 'Concurso / Acadêmico' },
+  { id: 'code', label: 'Tecnologia / TI' },
+  { id: 'scale', label: 'Direito / Legislação' },
+  { id: 'calculator', label: 'Exatas / Matemática' },
+  { id: 'book-open', label: 'Educação / Didática' },
+  { id: 'stethoscope', label: 'Saúde / Enfermagem' },
+  { id: 'award', label: 'Certificação / Geral' },
+  { id: 'globe', label: 'Línguas / Atualidades' },
+];
+
+export function ExamForm({ initialData, availableFolders = [] }: ExamFormProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const [title, setTitle] = useState(initialData?.title || '');
   const [category, setCategory] = useState(initialData?.category || '');
   const [description, setDescription] = useState(initialData?.description || '');
+  const [folderId, setFolderId] = useState<string>(initialData?.folderId || '');
+  const [isPinned, setIsPinned] = useState<boolean>(initialData?.isPinned || false);
+  const [icon, setIcon] = useState<string>(initialData?.icon || 'graduation-cap');
+  const [imageUrl, setImageUrl] = useState<string>(initialData?.imageUrl || '');
   const [questions, setQuestions] = useState<QuestionInput[]>(
     initialData?.questions || [
       {
@@ -171,6 +190,10 @@ export function ExamForm({ initialData }: ExamFormProps) {
         title: title.trim(),
         description: description.trim() || null,
         category: category.trim() || null,
+        folderId: folderId.trim() || null,
+        isPinned,
+        icon: icon || null,
+        imageUrl: imageUrl.trim() || null,
         questions: questions.map((q, i) => ({
           ...q,
           orderIndex: i,
@@ -208,7 +231,7 @@ export function ExamForm({ initialData }: ExamFormProps) {
                 {initialData?.id ? 'Editar Simulado' : 'Novo Simulado'}
               </h1>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                Configure as informações gerais e as questões do simulado
+                Configure as informações gerais, pasta, ícone e questões do simulado
               </p>
             </div>
           </div>
@@ -244,9 +267,20 @@ export function ExamForm({ initialData }: ExamFormProps) {
 
         {/* Informações Gerais */}
         <section className="mt-6 rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs dark:border-zinc-800 dark:bg-zinc-900/60">
-          <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
-            Informações Gerais
-          </h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+              Informações Gerais & Organização
+            </h2>
+            <label className="flex items-center gap-2 text-xs font-semibold text-zinc-700 dark:text-zinc-300 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={isPinned}
+                onChange={(e) => setIsPinned(e.target.checked)}
+                className="h-4 w-4 rounded-md border-zinc-300 text-indigo-600 focus:ring-indigo-500 dark:border-zinc-700"
+              />
+              <span>Fixar no topo</span>
+            </label>
+          </div>
 
           <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div className="sm:col-span-2">
@@ -257,7 +291,7 @@ export function ExamForm({ initialData }: ExamFormProps) {
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="Ex: Direito Constitucional - Prova 1"
+                placeholder="Ex: Concurso Professor Municipal - Prova 1"
                 required
                 className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-zinc-50/50 p-2.5 text-sm text-zinc-900 transition-colors focus:border-indigo-500 focus:bg-white focus:outline-hidden dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:focus:border-indigo-500"
               />
@@ -271,10 +305,66 @@ export function ExamForm({ initialData }: ExamFormProps) {
                 type="text"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                placeholder="Ex: Direito, TI, Matemática"
+                placeholder="Ex: Pedagogia, Didática, TI"
                 className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-zinc-50/50 p-2.5 text-sm text-zinc-900 transition-colors focus:border-indigo-500 focus:bg-white focus:outline-hidden dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:focus:border-indigo-500"
               />
             </div>
+          </div>
+
+          {/* Pasta Organizadora & Ícone */}
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+                Pasta Organizadora
+              </label>
+              <select
+                value={folderId}
+                onChange={(e) => setFolderId(e.target.value)}
+                className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-zinc-50/50 p-2.5 text-sm text-zinc-900 transition-colors focus:border-indigo-500 focus:bg-white focus:outline-hidden dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:focus:border-indigo-500"
+              >
+                <option value="">Sem pasta (Raiz / Geral)</option>
+                {availableFolders.map((f) => (
+                  <option key={f.id} value={f.id}>
+                    📁 {f.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+                Ícone Representativo
+              </label>
+              <div className="mt-1.5 flex flex-wrap gap-2">
+                {PRESET_ICONS.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => setIcon(item.id)}
+                    className={`rounded-lg px-2.5 py-1.5 text-xs font-medium transition-all ${
+                      icon === item.id
+                        ? 'bg-indigo-600 text-white shadow-xs'
+                        : 'border border-zinc-200 bg-zinc-50 text-zinc-700 hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-300'
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-4">
+            <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+              URL da Imagem Personalizada (Opcional)
+            </label>
+            <input
+              type="url"
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
+              placeholder="https://exemplo.com/imagem-simulado.png"
+              className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-zinc-50/50 p-2.5 text-sm text-zinc-900 transition-colors focus:border-indigo-500 focus:bg-white focus:outline-hidden dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:focus:border-indigo-500"
+            />
           </div>
 
           <div className="mt-4">
@@ -285,7 +375,7 @@ export function ExamForm({ initialData }: ExamFormProps) {
               rows={2}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Ex: Questões focadas nos artigos 1º a 5º da CF..."
+              placeholder="Ex: Questões focadas no edital municipal para professor..."
               className="mt-1.5 w-full rounded-xl border border-zinc-200 bg-zinc-50/50 p-2.5 text-sm text-zinc-900 transition-colors focus:border-indigo-500 focus:bg-white focus:outline-hidden dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:focus:border-indigo-500"
             />
           </div>

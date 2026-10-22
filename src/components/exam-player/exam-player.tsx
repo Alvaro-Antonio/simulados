@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState, useEffect, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -13,9 +13,12 @@ import {
   Check,
   Send,
   LayoutGrid,
+  Timer,
+  Play,
 } from 'lucide-react';
 import { submitExamAttemptAction } from '@/app/actions/exam-actions';
 import { QuestionNav } from './question-nav';
+import { ExamTimer, formatTimeVerbose } from './exam-timer';
 
 interface ExamPlayerProps {
   exam: {
@@ -50,6 +53,20 @@ export function ExamPlayer({ exam }: ExamPlayerProps) {
   const [showNavDrawer, setShowNavDrawer] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
+  // Estados do Cronômetro
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const [isTimerPaused, setIsTimerPaused] = useState(false);
+
+  useEffect(() => {
+    if (isTimerPaused) return;
+
+    const intervalId = setInterval(() => {
+      setElapsedSeconds((prev) => prev + 1);
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [isTimerPaused]);
+
   const totalQuestions = exam.questions.length;
   const currentQuestion = exam.questions[currentIndex];
   const questionIds = exam.questions.map((q) => q.id);
@@ -76,7 +93,12 @@ export function ExamPlayer({ exam }: ExamPlayerProps) {
   const handleFinishExam = () => {
     setErrorMsg(null);
     startTransition(async () => {
-      const res = await submitExamAttemptAction(exam.id, answers, questionIds);
+      const res = await submitExamAttemptAction(
+        exam.id,
+        answers,
+        questionIds,
+        elapsedSeconds
+      );
       if (!res.success || !res.attemptId) {
         setErrorMsg(res.error || 'Erro ao processar respostas.');
       } else {
@@ -130,7 +152,14 @@ export function ExamPlayer({ exam }: ExamPlayerProps) {
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
+          {/* Cronômetro */}
+          <ExamTimer
+            seconds={elapsedSeconds}
+            isPaused={isTimerPaused}
+            onTogglePause={() => setIsTimerPaused(!isTimerPaused)}
+          />
+
           {/* Botão de Grade de Questões */}
           <button
             type="button"
@@ -139,7 +168,7 @@ export function ExamPlayer({ exam }: ExamPlayerProps) {
           >
             <LayoutGrid className="h-4 w-4" />
             <span>
-              {answeredCount}/{totalQuestions} respondidas
+              {answeredCount}/{totalQuestions}
             </span>
           </button>
 
@@ -149,10 +178,30 @@ export function ExamPlayer({ exam }: ExamPlayerProps) {
             className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:bg-indigo-500 active:scale-98"
           >
             <Send className="h-3.5 w-3.5" />
-            <span>Finalizar Simulado</span>
+            <span>Finalizar</span>
           </button>
         </div>
       </div>
+
+      {/* Banner de Simulado Pausado */}
+      {isTimerPaused && (
+        <div className="mt-4 flex flex-col gap-2 rounded-2xl border border-amber-300 bg-amber-50/90 p-3.5 text-xs text-amber-900 shadow-xs dark:border-amber-800 dark:bg-amber-950/60 dark:text-amber-200 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-2">
+            <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-amber-500" />
+            <span>
+              <strong>Cronômetro pausado.</strong> O tempo de prova está congelado para descanso ou pausa.
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setIsTimerPaused(false)}
+            className="inline-flex w-fit items-center gap-1.5 rounded-xl bg-amber-600 px-3 py-1.5 font-semibold text-white transition-colors hover:bg-amber-500"
+          >
+            <Play className="h-3 w-3 fill-current" />
+            <span>Retomar Simulado</span>
+          </button>
+        </div>
+      )}
 
       {/* Barra de Progresso Visual */}
       <div className="mt-4">
@@ -328,6 +377,16 @@ export function ExamPlayer({ exam }: ExamPlayerProps) {
               Você respondeu <strong>{answeredCount}</strong> de{' '}
               <strong>{totalQuestions}</strong> questões.
             </p>
+
+            <div className="mt-3 flex items-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50/80 p-3 text-xs text-zinc-700 dark:border-zinc-800 dark:bg-zinc-800/50 dark:text-zinc-300">
+              <Timer className="h-4 w-4 shrink-0 text-indigo-500" />
+              <span>
+                Tempo decorrido:{' '}
+                <strong className="font-mono text-zinc-900 dark:text-zinc-100">
+                  {formatTimeVerbose(elapsedSeconds)}
+                </strong>
+              </span>
+            </div>
 
             {answeredCount < totalQuestions && (
               <div className="mt-4 flex items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs text-amber-800 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-300">

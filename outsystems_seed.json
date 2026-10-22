@@ -1,0 +1,3507 @@
+{
+  "title": "Certificação OutSystems Associate Developer O11 - Banco Avançado",
+  "description": "Banco completo com 150 questões avançadas de Múltipla Escolha e Certo/Errado baseadas na certificação OutSystems Associate Reactive Developer O11, contendo pegadinhas clássicas de prova e gabarito comentado.",
+  "category": "OutSystems O11",
+  "questions": [
+    {
+      "statement": "Em uma tela de listagem de pedidos, um desenvolvedor cria um Aggregate para buscar pedidos juntamente com o cliente associado. No entanto, alguns pedidos ainda não possuem cliente atribuído. Qual tipo de Join no Aggregate deve ser utilizado para que todos os pedidos continuem sendo exibidos, mesmo sem cliente?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "O join \"With or Without\" equivale a um LEFT OUTER JOIN no SQL, garantindo que todos os registros da entidade primária (Order) sejam retornados, preenchendo os atributos da entidade secundária (Customer) com valores padrão (nulos/vazios) caso não haja correspondência.",
+      "orderIndex": 0,
+      "options": [
+        {
+          "text": "Only With (Inner Join)",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "With or Without (Left Outer Join)",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "With (Full Outer Join)",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Sem join, usando dois Aggregates independentes com For Each",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Ao aplicar uma função de agregação como \"Count\" em um Aggregate, o otimizador de plataforma do OutSystems ignora a ordenação e os atributos que não fazem parte do agrupamento ou da contagem.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. Quando um Aggregate possui uma agregação (como Count, Sum ou Group By), o compilador do OutSystems gera uma consulta SQL otimizada contendo apenas as colunas agrupadas e calculadas, descartando cláusulas de ordenação que não afetem o resultado agregado.",
+      "orderIndex": 1,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Um desenvolvedor precisa exibir em tela a contagem total de registros de uma tabela paginada com Max Records = 10. Qual propriedade deve ser utilizada para exibir o número total de itens existentes no banco de dados?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "A propriedade GetOrders.Count retorna o total absoluto de registros que satisfazem os filtros no banco de dados, independentemente do Max Records definido. Já GetOrders.List.Length retorna apenas a quantidade de registros carregados em memória na página atual (no máximo 10).",
+      "orderIndex": 2,
+      "options": [
+        {
+          "text": "GetOrders.List.Length",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "GetOrders.Count",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "GetOrders.TotalRows",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Length(GetOrders.List)",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Um filtro de Aggregate que utiliza uma Client Variable diretamente em sua cláusula de filtro é executado exclusivamente no lado do cliente (browser), sem enviar requisições ao servidor.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. Os Aggregates em Reactive Web Apps são sempre executados no servidor de banco de dados. O valor da Client Variable é enviado como parâmetro na chamada ao servidor para compor a query SQL.",
+      "orderIndex": 3,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Em um Aggregate, qual é a melhor prática recomendada pela OutSystems para filtrar registros textuais permitindo buscas parciais sem perda crítica de performance?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "A função Like com curinga ao final (ex: Customer.Name like SearchText + \"%\") permite que o banco de dados utilize índices B-Tree existentes. O uso de curinga no início (\"%\" + SearchText + \"%\") força uma varredura completa da tabela (Full Table Scan), prejudicando o desempenho em tabelas volumosas.",
+      "orderIndex": 4,
+      "options": [
+        {
+          "text": "Customer.Name like \"%\" + SearchKeyword + \"%\"",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Index(Customer.Name, SearchKeyword) > -1",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "text": "Customer.Name like SearchKeyword + \"%\", quando o caso de uso permitir busca por prefixo",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "text": "ToLower(Customer.Name) = ToLower(SearchKeyword)",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Se um Aggregate tiver atributos em sua entidade que nunca são lidos ou vinculados a widgets na tela, o compilador da plataforma automaticamente exclui esses atributos do SELECT da consulta SQL gerada.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. O otimizador de consultas do OutSystems realiza análise de dependência de código e projeta apenas os atributos explicitamente utilizados na tela, variáveis ou expressões, reduzindo o tráfego de dados e o consumo de memória.",
+      "orderIndex": 5,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Ao utilizar o recurso nativo do Service Studio para criar uma Entidade a partir de uma planilha Excel, quais elementos são gerados automaticamente pela plataforma?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "A plataforma cria a Entidade com atributos mapeados pelas colunas do Excel, o arquivo Excel na aba Data/Resources, uma Server Action com a lógica de carga (leitura com Excel To Record List) e um Timer configurado para disparar na publicação (Schedule: When Published).",
+      "orderIndex": 6,
+      "options": [
+        {
+          "text": "Apenas a Entidade e uma tela CRUD com Scaffold",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "A Entidade, o Resource do arquivo Excel, uma Server Action de Bootstrap e um Timer programado para \"When Published\"",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Uma Client Action, uma Server Action e uma API REST de upload",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "A Entidade e um Processo BPT de importação contínua",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "A Server Action de Bootstrap gerada automaticamente pelo OutSystems sempre sobrescreve todos os registros existentes no banco de dados a cada nova publicação do módulo.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. A ação gerada verifica inicialmente se a entidade está vazia (ex: Aggregate com IsEmpty). Se houver registros, a execução é abortada imediatamente para evitar duplicação ou perda de dados.",
+      "orderIndex": 7,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Se uma planilha Excel utilizada no Bootstrap contiver uma coluna com valores vazios em uma linha e essa coluna estiver mapeada para um atributo não mandatório do tipo Inteiro, qual valor será gravado no banco de dados?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "No OutSystems, atributos de tipos primitivos numéricos possuem valores padrão. Para o tipo Integer, o valor default quando não há preenchimento é 0 (zero), pois tipos primitivos na plataforma não assumem representação de NULL no modelo de domínio.",
+      "orderIndex": 8,
+      "options": [
+        {
+          "text": "NULL do banco de dados",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "O valor padrão 0 (zero)",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "A importação falhará gerando Database Exception",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "O registro inteiro da linha é descartado silenciosamente",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Para atualizar os dados de uma entidade já populada via Bootstrap com uma nova versão da planilha Excel contendo novos registros, basta substituir o arquivo no Service Studio e publicar novamente sem alterar a lógica.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. Como a Server Action de Bootstrap possui uma verificação inicial que encerra a execução se a tabela não estiver vazia, a publicação não importará os novos dados a menos que a lógica seja modificada ou a verificação de tabela vazia seja removida/ajustada.",
+      "orderIndex": 9,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Qual ferramenta do ecossistema OutSystems permite ao administrador monitorar o status de execução, histórico e erros de um Timer de Bootstrap de dados?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "O Service Center é o console administrativo do OutSystems onde é possível verificar logs de timers (Environment Management > Monitoring > Timers), disparar execuções manuais e alterar agendamentos.",
+      "orderIndex": 10,
+      "options": [
+        {
+          "text": "LifeTime",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Service Center",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "App Feedback",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Service Studio Debugger",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Em uma tela Reactive Web, qual é a diferença fundamental no comportamento entre definir a propriedade \"On Click\" de um Botão como uma Screen Action versus como uma Navigation (tela de destino)?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Definir como Navigation redireciona o usuário diretamente para outra tela sem disparar lógica intermediária no cliente. Ao vincular a uma Client Action, o desenvolvedor pode executar validações, chamadas de lógica ou manipulação de estado antes de decidir redirecionar ou permanecer na tela.",
+      "orderIndex": 11,
+      "options": [
+        {
+          "text": "Navigation recarrega todo o navegador, enquanto Screen Action mantém a sessão",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Navigation executa uma transação de banco de dados antes da transição",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "text": "Navigation realiza a transição imediata para a tela de destino sem executar lógica local prévia, enquanto a Client Action permite executar fluxos de lógica antes de redirecionar",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "text": "Não há diferença prática, pois ambos compilam para a mesma instrução JavaScript",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Um botão com a propriedade \"Built-in Validations\" definida como \"Yes\" impede a execução da Client Action associada caso algum campo obrigatório do formulário esteja inválido.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. O \"Built-in Validations = Yes\" avalia os widgets de entrada e define as propriedades \"Form.Valid\" e \"Input.Valid\" como falso, mas a Client Action ainda é disparada normalmente. Cabe ao desenvolvedor verificar a condição \"If Form.Valid\" no início da ação.",
+      "orderIndex": 12,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Qual propriedade de um Link em uma aplicação Reactive Web deve ser configurada para que o clique abra uma página externa em uma nova aba do navegador?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Na propriedade \"Target\" do Link ou da Destination externa, seleciona-se \"_blank\" para que o navegador renderize a página em uma nova aba ou janela.",
+      "orderIndex": 13,
+      "options": [
+        {
+          "text": "Method = External",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Target = \"_blank\"",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "OpenType = NewSession",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "WindowMode = PopUp",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Em Reactive Web Apps, é possível desabilitar visual e funcionalmente um botão atribuindo à sua propriedade \"Enabled\" uma expressão booleana.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. A propriedade \"Enabled\" aceita expressões booleanas. Quando avaliada como False, o botão ganha o atributo disabled no DOM e não dispara seu evento On Click.",
+      "orderIndex": 14,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Um desenvolvedor deseja disparar o download de um relatório em PDF gerado no servidor após o clique em um botão. Qual elemento de fluxo deve ser utilizado no final da Client Action para enviar o arquivo ao navegador?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "O nó de fluxo \"Download\" é o elemento específico no OutSystems utilizado para transferir arquivos binários para o dispositivo do usuário a partir de uma ação.",
+      "orderIndex": 15,
+      "options": [
+        {
+          "text": "Destination para uma URL externa",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Nó Download com o conteúdo binário e nome do arquivo",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Message do tipo Info com o binário serializado",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "End com propriedade ExportFile = True",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Ao utilizar o widget Link com texto e ícone dentro de uma célula de tabela, o evento On Click propaga automaticamente para o evento On Row Click da tabela, a menos que o bubbling seja cancelado explicitamente.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. No modelo de eventos web padrão adotado pelas Reactive Web Apps, eventos de clique em elementos internos de uma linha se propagam (bubble up) para os manipuladores de clique da linha ou tabela caso não haja controle de propagação.",
+      "orderIndex": 16,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Em uma tela Reactive Web, qual evento do ciclo de vida é disparado antes de qualquer renderização visual e é ideal para inicializar variáveis locais simples que não dependem do DOM?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "O evento \"On Initialize\" ocorre antes da tela ser renderizada e antes dos Aggregates com \"Fetch At Start\" retornarem. É ideal para configurar variáveis e parâmetros que não dependem de manipulação do DOM nem de dados assíncronos.",
+      "orderIndex": 17,
+      "options": [
+        {
+          "text": "On Ready",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "On Initialize",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "On Render",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "On After Fetch",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "O evento \"On Render\" de uma tela é executado exclusivamente uma única vez durante todo o ciclo de permanência do usuário naquela tela.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. O \"On Render\" é disparado logo após o primeiro desenho da tela e é reexecutado sempre que ocorrem alterações em dados ou variáveis vinculadas aos componentes da tela que provoquem re-renderização visual.",
+      "orderIndex": 18,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Para inicializar uma biblioteca JavaScript externa que precisa manipular diretamente um elemento do DOM identificado por seu ElementId, qual evento de ciclo de vida deve ser utilizado?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "O evento \"On Ready\" é executado quando o DOM da tela ou bloco está totalmente carregado e pronto para interação. É o momento seguro para invocar scripts que acessem elementos visuais pelo id.",
+      "orderIndex": 19,
+      "options": [
+        {
+          "text": "On Initialize",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "On Ready",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "On Destroy",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "On Parameters Changed",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "O evento \"On Destroy\" é adequado para registrar logs no banco de dados e persistir transações críticas de negócios através de Server Actions com segurança.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. O \"On Destroy\" é executado no descarregamento da tela/bloco e serve primariamente para limpeza de ouvintes de eventos (listeners) e liberação de recursos do browser. Executar lógicas assíncronas de servidor complexas no On Destroy pode ser interrompido pela transição de tela.",
+      "orderIndex": 20,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Quando o valor de um Input Parameter de um Web Block é alterado pela tela pai, qual evento é disparado no bloco para permitir que ele recalcule dados ou atualize seus Aggregates?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "O evento \"On Parameters Changed\" é disparado em um Block sempre que a tela ou bloco pai fornece um novo valor para um de seus parâmetros de entrada.",
+      "orderIndex": 21,
+      "options": [
+        {
+          "text": "On Ready",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "On Parameters Changed",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "On Refresh",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "On Data Changed",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Aggregates configurados com \"Fetch = At Start\" bloqueiam a renderização inicial da tela até que o banco de dados responda à consulta.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. Em Reactive Web, os dados são buscados de forma assíncrona. A tela é renderizada imediatamente com valores default ou estados de carregamento (placeholders), e os widgets são reativos quando a consulta é concluída.",
+      "orderIndex": 22,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Sobre a execução de Server Actions invocadas a partir de Client Actions em Reactive Web Apps, qual das afirmações reflete com maior precisão o comportamento da plataforma?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "A invocação de uma Server Action a partir de uma Client Action gera uma requisição de rede segura (REST/JSON) ao backend. O navegador aguarda a resposta assíncrona para prosseguir no fluxo de lógica.",
+      "orderIndex": 23,
+      "options": [
+        {
+          "text": "A Server Action é compilada para WebAssembly e roda no dispositivo do cliente",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "A chamada gera uma requisição HTTP assíncrona ao servidor, serializando os parâmetros de entrada e desserializando os parâmetros de saída",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Parâmetros do tipo Record ou List não podem ser passados para Server Actions",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Todas as Server Actions chamadas em uma mesma Client Action rodam em paralelo automaticamente",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Uma Client Action marcada com a propriedade \"Function = Yes\" pode invocar diretamente uma Server Action dentro de seu fluxo de lógica.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. Funções no OutSystems devem ser síncronas e imediatas para uso em expressões inline. Como a chamada a uma Server Action exige comunicação de rede assíncrona, a plataforma não permite invocar Server Actions dentro de ações configuradas como Function.",
+      "orderIndex": 24,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Qual das opções representa uma boa prática arquitetural ao desenhar a interação entre Client Actions e Server Actions para evitar degradação de desempenho em conexões móveis?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Realizar múltiplas chamadas consecutivas de servidor (\"chatty interface\") causa alta latência. A melhor prática é encapsular toda a lógica necessária em uma única Server Action com os dados consolidados, realizando apenas uma viagem de ida e volta ao servidor (Round Trip).",
+      "orderIndex": 25,
+      "options": [
+        {
+          "text": "Fazer várias chamadas a Server Actions pequenas dentro de um loop For Each no cliente",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Agrupar as operações necessárias em uma única Server Action composta para reduzir o número de requisições de rede (Round Trips)",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Substituir todas as Server Actions por Client Actions manipulando variáveis globais",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Desativar o timeout de rede das Client Actions nas propriedades do módulo",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Uma Server Action pública em um módulo Producer pode ser invocada diretamente por uma Client Action em um módulo Consumer de outro aplicativo, desde que a dependência seja adicionada.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. Desde que a Server Action esteja marcada como \"Public = Yes\" no produtor e referenciada pelo consumidor via Manage Dependencies, ela pode ser invocada por Client Actions.",
+      "orderIndex": 26,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "O que acontece com os dados trafegados entre o cliente e o servidor quando uma Server Action retorna uma lista com atributos não utilizados pelo cliente?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Diferente dos Aggregates (onde o otimizador remove colunas não utilizadas do SELECT), em Server Actions a estrutura completa definida nos Output Parameters é serializada e enviada pela rede, tornando crucial modelar estruturas específicas para evitar payload excessivo.",
+      "orderIndex": 27,
+      "options": [
+        {
+          "text": "O otimizador da plataforma remove automaticamente os campos não utilizados da resposta JSON",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Todos os atributos da estrutura retornada são transmitidos pela rede integralmente, consumindo banda desnecessária",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "O navegador rejeita a resposta por falta de correspondência de schema",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "A Server Action falha em tempo de execução com erro de serialização",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Em uma Server Action, se ocorrer uma Database Exception e houver um manipulador específico de exceção configurado com \"Abort Transaction = Yes\", todas as alterações feitas no banco de dados durante essa transação são revertidas (rollback).",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. A propriedade \"Abort Transaction = Yes\" instrui a plataforma a executar um ROLLBACK da transação de banco de dados atual, desfazendo inserções, atualizações ou exclusões pendentes.",
+      "orderIndex": 28,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Quais tipos de dados podem ser armazenados em uma Client Variable em aplicações Reactive Web do OutSystems?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "As Client Variables suportam exclusivamente tipos de dados básicos primitivos (Text, Integer, Boolean, DateTime, Date, Time, Decimal, Currency, PhoneNumber, Email, BinaryData). Elas NÃO suportam Records, Lists, BinaryData complexo nem identificadores de entidades compostas.",
+      "orderIndex": 29,
+      "options": [
+        {
+          "text": "Qualquer tipo de dado, incluindo Records e Lists complexas",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Apenas tipos básicos primitivos como Text, Integer, Boolean, Date e Currency",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Apenas tipos chave primária de Entidades",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Apenas variáveis do tipo Text serializadas em base64",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Client Variables são adequadas para armazenar segredos, tokens de autenticação privados e dados confidenciais do usuário porque são criptografadas com chave assimétrica pelo servidor.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. Client Variables são persistidas em armazenamento local do navegador (local storage/session) e não oferecem garantia de sigilo contra inspeção no lado do cliente. Nunca devem ser usadas para dados sensíveis ou decisões críticas de segurança.",
+      "orderIndex": 30,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Quando o valor de uma Client Variable é modificado em uma tela, qual é o impacto nas outras telas da mesma aplicação Reactive?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "O valor de uma Client Variable é compartilhado no contexto da aplicação no mesmo navegador. Se uma tela subsequente ou componente ler a variável, ela refletirá o novo valor atribuído.",
+      "orderIndex": 31,
+      "options": [
+        {
+          "text": "O valor só é visível na tela em que foi alterado e desaparece na navegação",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "O novo valor fica imediatamente disponível para todas as telas e componentes da mesma aplicação no navegador",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "A alteração sincroniza automaticamente com as sessões de outros usuários conectados",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "É necessário chamar uma Server Action para propagar a variável entre telas",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "O valor de uma Client Variable é preservado mesmo se o usuário fechar completamente o navegador e reabrir a aplicação, mantendo seu valor padrão inicial.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. Em Reactive Web Apps, as Client Variables são armazenadas no LocalStorage do navegador, persistindo entre sessões de navegação, a menos que sejam limpas programaticamente ou pelos dados do browser.",
+      "orderIndex": 32,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "O que acontece se uma Client Variable for acessada diretamente dentro de uma Server Action?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Client Variables não existem no escopo do servidor. Tentar acessá-las diretamente dentro de uma Server Action gera um erro de compilação no Service Studio; seus valores devem ser passados explicitamente como Input Parameters.",
+      "orderIndex": 33,
+      "options": [
+        {
+          "text": "O servidor lê o valor via cookie transparente em tempo de execução",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Gera erro de compilação, pois Client Variables pertencem ao escopo do cliente e não podem ser lidas diretamente no servidor",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "O valor é retornado sempre como string vazia",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "O servidor dispara um evento síncrono para consultar o browser",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Na arquitetura recomendada pela OutSystems (Architecture Canvas), qual é a regra fundamental de dependências entre módulos de uma mesma camada ou de camadas diferentes?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "A regra geral estabelece que módulos de camadas superiores podem consumir módulos de camadas inferiores (Upward Dependencies são proibidas), dependências circulares entre módulos devem ser evitadas, e dependências laterais no Core devem ser minimizadas ou desacopladas.",
+      "orderIndex": 34,
+      "options": [
+        {
+          "text": "Módulos da camada Core podem consumir livremente módulos da camada End-User",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Dependências devem seguir fluxo descendente (camadas superiores consumindo inferiores), evitando dependências circulares e dependências para cima",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Módulos Foundation devem sempre consumir módulos Core para obter regras de negócio",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Não há restrição arquitetural em módulos do mesmo ambiente de desenvolvimento",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Ao alterar a assinatura de uma Server Action pública adicionando um novo Input Parameter obrigatório sem valor default em um módulo Producer, os módulos Consumers continuam funcionando sem necessidade de atualização.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. Trata-se de uma \"Breaking Change\". Os módulos consumidores ficarão com dependências desatualizadas (outdated/incompatíveis) e apresentarão erros de compilação até que sejam abertos, atualizados no Manage Dependencies e repubilcados.",
+      "orderIndex": 35,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Qual ferramenta visual do Service Studio permite ao desenvolvedor inspecionar e adicionar elementos públicos disponibilizados por outros módulos?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "A janela \"Manage Dependencies\" (acessada pelo atalho Ctrl+Q ou botão na barra de ferramentas) permite selecionar produtores, visualizar elementos públicos (entidades, actions, blocos, etc.) e incluí-los como referências.",
+      "orderIndex": 36,
+      "options": [
+        {
+          "text": "Service Center Console",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Manage Dependencies (Ctrl+Q)",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "LifeTime Deployment Manager",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Module Configuration Tab",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Uma Entidade pública definida com a propriedade \"Expose Read Only = Yes\" impede que módulos consumidores criem, atualizem ou excluam registros diretamente através das Entity Actions automáticas (Create, Update, Delete).",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. A boa prática de isolamento de dados no OutSystems recomenda \"Expose Read Only = Yes\" para que o módulo dono da entidade centralize e governe a integridade dos dados por meio de Server Actions públicas de validação e escrita.",
+      "orderIndex": 37,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Quando um módulo possui dependências desatualizadas mas sem conflito de assinaturas (apenas nova versão publicada pelo produtor), qual indicador visual aparece na barra de status do Service Studio?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "O Service Studio exibe um ícone de aviso de dependências desatualizadas (triângulo amarelo/azul informativo) permitindo que o desenvolvedor clique em \"Refresh\" para sincronizar com a versão mais recente.",
+      "orderIndex": 38,
+      "options": [
+        {
+          "text": "Erro crítico de compilação vermelho bloqueando a publicação",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Aviso de dependência desatualizada informando que uma nova versão do produtor está disponível",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "O módulo produtor é bloqueado para edição até que o consumidor seja deletado",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "O Service Studio remove a referência automaticamente",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Criar uma dependência cíclica entre dois módulos Core (Módulo A consumindo Módulo B, e Módulo B consumindo Módulo A) não causa impacto em deploys automatizados no LifeTime.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. Dependências circulares causam complexidade de build, bloqueios em cascata, dificuldade de deploy independente e violam as diretrizes fundamentais da Arquitetura OutSystems.",
+      "orderIndex": 39,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Qual é a principal diferença de comportamento e utilização entre uma Entidade regular e uma Entidade Estática (Static Entity) no OutSystems?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Static Entities funcionam como enumerações ricas no banco de dados. Seus registros são fixos em tempo de design (Records com identificadores nomeados utilizáveis diretamente no código), sofrem cache em memória e não possuem Entity Actions de criação/edição em runtime.",
+      "orderIndex": 40,
+      "options": [
+        {
+          "text": "Static Entities armazenam dados temporários que são excluídos no final da sessão do usuário",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Static Entities definem valores constantes conhecidos em tempo de design (equivalentes a Enums), com cache em memória e sem Entity Actions de escrita em tempo de execução",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Entidades normais rodam apenas na memória do navegador e Static Entities rodam no servidor",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Static Entities não criam tabelas no banco de dados relacional",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Os registros de uma Entidade Estática podem ser criados dinamicamente em tempo de execução utilizando a Server Action CreateOrUpdateStaticEntity.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. Entidades Estáticas são somente-leitura em tempo de execução. Novos registros só podem ser adicionados no Service Studio em tempo de desenvolvimento.",
+      "orderIndex": 41,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Ao criar uma Entidade com um identificador do tipo Integer e marcar a propriedade \"Autonumber = Yes\", como a chave primária é gerada?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "A geração da chave é delegada ao mecanismo de auto-incremento do banco de dados relacional (Identity no SQL Server ou Sequence no Oracle/Postgres) no momento em que a Entity Action Create é disparada.",
+      "orderIndex": 42,
+      "options": [
+        {
+          "text": "O Service Studio calcula o próximo número aleatório no cliente",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "O banco de dados gera o identificador incremental sequencial automaticamente durante a inserção",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "O desenvolvedor deve passar o valor na propriedade Id do registro",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "É gerado um UUID em formato numérico hash de 64 bits",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Uma Entidade pode ter sua chave primária configurada com tipo de dados Text, permitindo chaves de negócio naturais como códigos de país ISO ou CPFs.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. O identificador de uma Entidade no OutSystems pode ser de tipos primitivos como Integer, Long Integer ou Text. Quando configurado como Text, o AutoNumber é desabilitado.",
+      "orderIndex": 43,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Qual atributo especial é obrigatório em toda Entidade Estática criada no OutSystems para identificar o registro de forma legível por humanos?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Toda Static Entity possui por padrão os atributos obrigatórios Id, Label (descrição textual para exibição), Order (ordenação) e Is_Active (sinalizador se o item está ativo para uso). O Label é o atributo exibido em dropdowns.",
+      "orderIndex": 44,
+      "options": [
+        {
+          "text": "Code e Description",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Id, Label, Order e Is_Active",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Name e Value apenas",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Identifier e DisplayText",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Ao alterar o tipo de dados de um atributo existente de Text para Date em uma Entidade com dados populados, o 1-Click Publish converte automaticamente todos os textos para datas válidas sem risco de falha.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. Se houver registros na tabela com formatos incompatíveis com Date, o comando DDL de alteração do banco de dados falhará no 1-Click Publish gerando erro de banco de dados.",
+      "orderIndex": 45,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Se uma Entidade possui um atributo marcado com a propriedade \"Is Mandatory = Yes\", o que acontece se tentarmos salvar um registro passando valor nulo/vazio na Server Action de Create?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "O banco de dados aplica a restrição NOT NULL na coluna correspondente. Se o valor for enviado em desacordo com as regras de preenchimento, uma Database Exception é lançada em tempo de execução.",
+      "orderIndex": 46,
+      "options": [
+        {
+          "text": "A plataforma preenche automaticamente com um valor aleatório",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "O banco de dados rejeita a inserção e uma Database Exception é gerada",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "A gravação ocorre normalmente e a coluna é salva com valor NULL",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "O registro é gravado em uma tabela de quarentena",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Como um Web Block comunica uma ação ou alteração de estado para a tela ou bloco pai que o hospeda?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "No OutSystems, a comunicação de filho para pai ocorre exclusivamente via Eventos. O bloco dispara um Evento (Trigger Event) com parâmetros opcionais, e a tela pai implementa um Event Handler (Client Action) para reagir ao evento.",
+      "orderIndex": 47,
+      "options": [
+        {
+          "text": "Escrevendo em uma variável local da tela pai diretamente por referência",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Disparando um Evento com o nó Trigger Event e configurando um Event Handler na tela pai",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Invocando uma Server Action que notifica a tela pai via push notification",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Alterando o valor de um Input Parameter do próprio bloco",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "A tela pai pode invocar diretamente uma Client Action interna de um Web Block para solicitar que ele execute uma operação.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. O encapsulamento de Web Blocks no OutSystems é unidirecional: pais passam dados aos filhos via Input Parameters e filhos notificam pais via Eventos. Pais não chamam ações internas de blocos diretamente.",
+      "orderIndex": 48,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Se um Evento em um Web Block tiver sua propriedade \"Mandatory\" definida como \"Yes\", o que acontece na tela que consome esse bloco se ela não definir um Event Handler?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "O compilador do Service Studio acusa um erro de validação (TrueChange), impedindo a publicação até que a tela que instancia o bloco configure um manipulador para o evento mandatório.",
+      "orderIndex": 49,
+      "options": [
+        {
+          "text": "O evento é ignorado silenciosamente em tempo de execução",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "O Service Studio gera um erro de validação (TrueChange) impedindo a publicação do módulo",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "O navegador exibe uma mensagem de alerta ao usuário quando o evento é disparado",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "A tela pai é recarregada automaticamente",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Eventos de blocos suportam a passagem de parâmetros de múltiplos tipos, incluindo Records e Lists.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. Os Eventos definidos em Web Blocks podem conter parâmetros de entrada que transportam dados simples ou estruturas complexas (Records/Lists) para o manipulador da tela pai.",
+      "orderIndex": 50,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Qual é o comportamento do DOM quando um Web Block é reutilizado várias vezes na mesma tela dentro de uma lista?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Cada item da lista instancia uma cópia independente do bloco, com seu próprio estado isolado de variáveis locais, ciclo de vida e renderização.",
+      "orderIndex": 51,
+      "options": [
+        {
+          "text": "Todas as instâncias compartilham as mesmas variáveis locais em memória",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Cada instância mantém seu próprio estado isolado de variáveis locais e ciclo de vida independente",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Apenas a primeira instância é renderizada no navegador por motivos de performance",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Os eventos de todas as instâncias são unificados em um único payload",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Ao alterar um Input Parameter passado para um Web Block a partir da tela pai, o bloco reexecuta automaticamente seu evento On Initialize.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. O evento On Initialize só roda quando o bloco é instanciado pela primeira vez. Mudanças subsequentes em parâmetros de entrada disparam o evento On Parameters Changed.",
+      "orderIndex": 52,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Em um fluxo de lógica, qual é a principal diferença entre a execução de um nó \"If\" e um nó \"Switch\"?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "O nó If avalia uma única expressão booleana com exatamente dois ramos (True e False). O nó Switch avalia múltiplos ramos condicionais sequencialmente e executa o primeiro cuja condição for verdadeira (ou o ramo Otherwise se nenhum for atendido).",
+      "orderIndex": 53,
+      "options": [
+        {
+          "text": "O nó Switch executa todos os ramos verdadeiros simultaneamente em threads paralelas",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "O nó If possui duas saídas booleanas, enquanto o Switch avalia múltiplas condições na ordem definida e executa a primeira verdadeira (ou Otherwise)",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "O nó Switch só pode ser utilizado em Server Actions e nunca em Client Actions",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "O nó If requer sempre tratamento de exceções dedicado",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Dentro de um loop \"For Each\", é considerada uma boa prática da plataforma invocar Aggregates ou Server Actions a cada iteração para buscar dados complementares de cada item.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. Esta é a clássica antiprática \"N+1 Queries\". Invocar consultas ou ações de servidor dentro de um loop gera dezenas de viagens de rede ou queries repetitivas, degradando o desempenho. A melhor prática é buscar todos os dados de forma consolidada antes do loop com um Join ou IN filter.",
+      "orderIndex": 54,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Qual propriedade do elemento \"List\" permite iterar sobre seus elementos em um loop For Each sem consumir ou alterar a lista original?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "O elemento For Each itera sobre o atributo Current da lista (ex: MyList.Current), avançando o ponteiro de iteração até o final da lista sem remover itens da coleção.",
+      "orderIndex": 55,
+      "options": [
+        {
+          "text": "MyList.CurrentRowNumber",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "MyList.Current",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "MyList.Next()",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "MyList.Value",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Em uma Client Action, o nó \"Destination\" permite transferir a execução diretamente para uma Server Action sem recarregar a tela.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. O nó Destination serve exclusivamente para navegação de telas (redirecionar para outra Screen ou URL externa). Chamadas a Server Actions são feitas utilizando o elemento Run Server Action.",
+      "orderIndex": 56,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "O que acontece quando uma ação chega a um nó \"End\" que possui parâmetros de saída não atribuídos explicitamente por um nó Assign?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "No OutSystems, todos os parâmetros e variáveis são inicializados com os valores padrão de seus respectivos tipos (0 para numéricos, \"\" para texto, False para booleanos, #1900-01-01# para data, etc.).",
+      "orderIndex": 57,
+      "options": [
+        {
+          "text": "Ocorre uma NullPointer Exception em tempo de execução",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Os parâmetros retornam com o valor padrão (default) de seus respectivos tipos de dados",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "O compilador gera erro e impede a publicação",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "A execução fica em loop aguardando atribuição",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Qual é a diferença fundamental entre configurar uma fonte de dados de tela (Aggregate ou Data Action) com \"Fetch = At Start\" versus \"Fetch = Only On Demand\"?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "\"At Start\" inicia a busca de dados automaticamente assim que a tela carrega. \"Only On Demand\" não executa na inicialização e só busca dados quando explicitamente invocado por um nó \"Refresh Data\" em uma Client Action.",
+      "orderIndex": 58,
+      "options": [
+        {
+          "text": "\"At Start\" roda no servidor e \"Only On Demand\" roda no navegador do cliente",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "\"At Start\" dispara automaticamente no carregamento da tela, enquanto \"Only On Demand\" só é executado quando acionado explicitamente por um nó Refresh Data",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "\"Only On Demand\" armazena os dados em disco e \"At Start\" em memória volátil",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "\"At Start\" só aceita filtros constantes e não aceita variáveis",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Uma Data Action é utilizada quando a busca de dados de tela requer chamadas a serviços externos (REST/SOAP), lógica complexa prévia ou múltiplos Aggregates agregados em uma única resposta.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. Enquanto Aggregates são otimizados para consultas diretas ao banco de dados em uma única entidade/join, Data Actions permitem fluxos de lógica completos no servidor retornando estruturas personalizadas para a tela.",
+      "orderIndex": 59,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Quando dois Aggregates independentes em uma tela estão configurados como \"Fetch = At Start\", como a plataforma executa essas requisições?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "A plataforma otimiza o carregamento disparando as requisições de dados em paralelo ao servidor, sem que uma consulta precise esperar a conclusão da outra para ser iniciada.",
+      "orderIndex": 60,
+      "options": [
+        {
+          "text": "Em sequência estrita, em ordem alfabética dos nomes dos Aggregates",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "De forma assíncrona e em paralelo, otimizando o tempo total de carregamento da tela",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Mesclando os dois em uma única query SQL com UNION ALL automático",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Apenas o primeiro roda; o segundo é adiado até a interação do usuário",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "O nó \"Refresh Data\" em uma Client Action pode ser utilizado para reexecutar tanto Aggregates de tela quanto Data Actions.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. O nó Refresh Data é a instrução padrão para solicitar nova busca de dados ao servidor tanto para Screen Aggregates quanto para Data Actions.",
+      "orderIndex": 61,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Se um Aggregate depende de uma variável local cujo valor é preenchido no evento On Ready, qual é a melhor abordagem para evitar que o Aggregate execute com valor vazio na inicialização?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Configurar o Aggregate como \"Fetch = Only On Demand\" impede a execução prematura com dados inválidos. Em seguida, no fluxo do On Ready, após definir o valor da variável, invoca-se o nó Refresh Data.",
+      "orderIndex": 62,
+      "options": [
+        {
+          "text": "Deixar \"At Start\" e adicionar um timer de atraso no Aggregate",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Definir o Aggregate com \"Fetch = Only On Demand\" e executar um \"Refresh Data\" explicitamente no On Ready após calcular o valor",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Alterar a variável local para uma Client Variable global",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Desativar o Aggregate e usar SQL Raw direto",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "O evento \"On After Fetch\" de um Aggregate ou Data Action é executado no servidor imediatamente após a consulta ao banco de dados ser finalizada.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. O \"On After Fetch\" é uma Client Action executada no dispositivo do usuário (browser) assim que os dados retornam do servidor, sendo ideal para atualizar estados da interface ou disparar lógicas reativas.",
+      "orderIndex": 63,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Em uma tabela paginada com paginação do lado do servidor (Server-side Pagination), quais propriedades do Aggregate controlam respectivamente o início do lote de dados e o tamanho da página?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "A propriedade \"Start Index\" indica o deslocamento (offset) do primeiro registro a ser lido, e \"Max Records\" define a quantidade máxima de itens retornados naquela consulta.",
+      "orderIndex": 64,
+      "options": [
+        {
+          "text": "PageNumber e PageSize",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Start Index e Max Records",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "OffsetRows e LimitRows",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "FirstRecord e LastRecord",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Para que a ordenação dinâmica funcione ao clicar no cabeçalho de uma coluna de tabela, o Aggregate deve possuir uma Dynamic Sort configurada que receba o atributo de ordenação selecionado.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. A ordenação dinâmica do Aggregate precisa receber a variável que armazena a coluna e direção (ex: \"Customer.Name ASC\"), atualizada no evento On Sort do cabeçalho da tabela.",
+      "orderIndex": 65,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Quando o usuário está na página 4 de uma tabela e executa uma nova pesquisa textual com um filtro de busca, qual é a melhor prática recomendada para o \"Start Index\"?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Ao aplicar um novo filtro de pesquisa, o número de resultados totais pode ser menor que a página atual. É mandatória a redefinição de Start Index = 0 para exibir a primeira página de resultados e evitar páginas em branco.",
+      "orderIndex": 66,
+      "options": [
+        {
+          "text": "Manter o Start Index inalterado para preservar a posição do scroll",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Resetar o Start Index para 0 para exibir o início dos novos resultados filtrados",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Multiplicar o Start Index pelo Max Records",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Incrementar o Start Index em 1",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "O widget de Paginação (Pagination) calcula automaticamente a quantidade total de páginas dividindo a propriedade Length da lista pelo Max Records.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. O cálculo do total de páginas requer o \"Total Count\" (total de registros de todo o banco obtido via Aggregate.Count). Se usasse Length da lista, o widget pensaria que só existe uma página, pois a lista só contém os itens da página atual.",
+      "orderIndex": 67,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Qual fórmula representa o cálculo correto do Start Index para a página de número N (sendo N iniciado em 1) com tamanho de página P?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Para a página 1: (1 - 1) * P = 0. Para a página 2: (2 - 1) * P = P. Portanto, a fórmula correta é (PáginaAtual - 1) * MaxRecords.",
+      "orderIndex": 68,
+      "options": [
+        {
+          "text": "Start Index = N * P",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Start Index = (N - 1) * P",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Start Index = N + P",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Start Index = (N * P) - 1",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Em tabelas com ordenação dinâmica em Aggregates, passar strings de ordenação construídas por concatenação sem validação de nomes de atributos é uma boa prática e não oferece riscos.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. O uso de Dynamic Sort com entradas não sanitizadas ou não controladas pode levar a erros de execução de query SQL ou comportamentos imprevistos. Deve-se usar referências seguras de atributos da entidade.",
+      "orderIndex": 69,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Para implementar um relacionamento de 1 para Muitos (1:N) entre as entidades Cliente e Pedido, onde cada pedido pertence a um cliente, qual é a modelagem correta?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "No modelo relacional do OutSystems, o lado \"Muitos\" (Order) armazena a chave estrangeira apontando para a chave primária do lado \"Um\" (CustomerId do tipo Customer Identifier na entidade Order).",
+      "orderIndex": 70,
+      "options": [
+        {
+          "text": "Criar uma lista de Order Identifier dentro da entidade Customer",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Criar um atributo CustomerId do tipo Customer Identifier dentro da entidade Order",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Criar obrigatoriamente uma terceira entidade de junção com duas chaves estrangeiras",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Definir Customer e Order com a mesma chave primária",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "A regra de exclusão (Delete Rule) configurada como \"Protect\" em uma chave estrangeira impede a exclusão do registro pai se existirem registros filhos relacionados.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. A regra \"Protect\" atua como integridade referencial estrita (RESTRICT), lançando uma Database Exception caso se tente excluir o registro pai enquanto existirem registros dependentes associados.",
+      "orderIndex": 71,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Qual regra de exclusão (Delete Rule) deve ser utilizada para que, ao excluir um Usuário, todos os seus dados secundários de Perfil (relacionamento 1:1 de extensão) sejam excluídos automaticamente em cascata?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "A Delete Rule \"Delete\" (Cascade Delete) instrui o banco de dados a remover automaticamente todos os registros filhos dependentes quando o registro pai principal for deletado.",
+      "orderIndex": 72,
+      "options": [
+        {
+          "text": "Protect",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Ignore",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "text": "Delete",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "text": "Set Null",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Para modelar um relacionamento Muitos para Muitos (N:N) entre Estudantes e Cursos, cria-se uma terceira entidade intermediária contendo duas chaves estrangeiras (StudentId e CourseId).",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. Relacionamentos N:N no modelo relacional requerem uma entidade associativa (junction table) que armazene os pares de identificadores de ambas as entidades.",
+      "orderIndex": 73,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "O que acontece quando a Delete Rule de uma chave estrangeira é configurada como \"Ignore\"?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "A opção \"Ignore\" desativa a criação de restrições de Foreign Key no banco de dados para aquela relação. O registro pai pode ser deletado deixando registros filhos órfãos com referências a IDs inexistentes.",
+      "orderIndex": 74,
+      "options": [
+        {
+          "text": "O banco de dados define automaticamente o campo como zero",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "A exclusão do pai é permitida sem verificar dependentes, podendo gerar registros órfãos",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "A chave estrangeira é excluída do modelo de dados",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "O usuário recebe um aviso popup no navegador",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Um relacionamento 1 para 1 (1:1) é modelado definindo a chave primária da entidade de extensão com o mesmo tipo identificador da entidade principal.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. Em uma relação 1:1 (como User e UserProfileExtension), a chave primária da tabela de extensão tem o tipo de dados \"User Identifier\" e não é autonumber, compartilhando a mesma chave.",
+      "orderIndex": 75,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Ao desmarcar a role \"Anonymous\" e marcar apenas a role \"Registered\" nas propriedades de uma Screen, qual é o efeito prático?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Qualquer usuário não autenticado que tentar acessar a tela é bloqueado pela verificação de segurança da plataforma e redirecionado automaticamente para a tela de Login.",
+      "orderIndex": 76,
+      "options": [
+        {
+          "text": "A tela fica acessível para qualquer pessoa na internet",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Apenas usuários autenticados têm permissão de acesso; usuários anônimos são redirecionados para a tela de login",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "A tela fica restrita apenas aos administradores do Service Center",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "A tela é oculta do menu mas continua acessível via URL direta por anônimos",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Ocultar um botão de exclusão na interface visual utilizando a função CheckAdminRole() é suficiente para garantir a segurança da operação contra usuários maliciosos.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. Ocultar o botão na UI é apenas segurança cosmética de interface. Usuários com ferramentas de desenvolvedor do navegador podem manipular requisições. A validação de role com CheckRole DEVE obrigatoriamente ser revalidada no início da Server Action no backend.",
+      "orderIndex": 77,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Qual função nativa gerada pelo OutSystems deve ser usada no início de uma Server Action para validar se o usuário conectado possui a role personalizada \"Manager\"?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Para cada role personalizada criada no módulo (ex: Manager), o OutSystems gera funções utilitárias no escopo de lógica: CheckManagerRole(UserId), GrantManagerRole(UserId) e RevokeManagerRole(UserId). Passando GetUserId() no Check, valida-se o usuário atual.",
+      "orderIndex": 78,
+      "options": [
+        {
+          "text": "VerifyRole(\"Manager\")",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "CheckManagerRole(GetUserId())",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "HasRole(Manager)",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "User.Role == \"Manager\"",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "A atribuição da role \"Registered\" a um usuário ocorre automaticamente assim que ele efetua login bem-sucedido na aplicação.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. A role Registered é atribuída em tempo de execução pelo subsistema de autenticação a todo usuário que possua uma sessão autenticada válida.",
+      "orderIndex": 79,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "O que acontece quando um usuário autenticado tenta navegar para uma tela para a qual não possui a Role necessária?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "A plataforma interrompe a navegação e lança uma \"Security Exception\". No manipulador global de exceções (OnException), essa exceção redireciona o usuário para uma tela informativa de \"Invalid Permissions\" (Acesso Negado).",
+      "orderIndex": 80,
+      "options": [
+        {
+          "text": "O navegador exibe uma tela branca em branco sem erros",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Uma Security Exception é disparada e tratada pelo Exception Handler, redirecionando para a tela de permissões inválidas",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "A conta do usuário é bloqueada imediatamente no Service Center",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "A tela é exibida sem os dados do banco",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Criar uma Role com a propriedade \"Public = Yes\" permite que outros módulos da mesma infraestrutura atribuam e verifiquem essa role em suas próprias lógicas.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. Roles públicas podem ser referenciadas por módulos consumidores via Manage Dependencies para reaproveitamento consistente de permissões em toda a arquitetura.",
+      "orderIndex": 81,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Durante uma sessão de depuração (Debug) no Service Studio, qual é o impacto de marcar um breakpoint em uma Server Action compartilhada em um ambiente compartilhado de desenvolvimento?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Se o debugger estiver capturando requisições de todos os usuários (Debugger > Test in Public Area), requisições de outros desenvolvedores que acionarem a mesma Server Action ficarão retidas no breakpoint. A boa prática é filtrar o debug para o próprio usuário de teste.",
+      "orderIndex": 82,
+      "options": [
+        {
+          "text": "Apenas a própria sessão é afetada, pois o Service Studio cria um banco de dados temporário isolado",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Pode pausar requisições de outros desenvolvedores e usuários caso o filtro de usuário do Debugger não esteja configurado para a própria conta",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "O servidor de banco de dados entra em modo de manutenção e rejeita novas conexões",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "O módulo é despublicado automaticamente após 5 minutos de inatividade",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "No Service Center, a aba \"Monitoring > Errors\" registra os detalhes de pilha de execução (Stack Trace) e mensagens de erro não tratadas que ocorreram na aplicação.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. O log de erros do Service Center armazena o histórico completo com módulo, tenant, usuário, horário, mensagem descritiva e Stack Trace das exceções para diagnóstico.",
+      "orderIndex": 83,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Qual ferramenta do Service Studio exibe avisos de melhoria de qualidade de código (Warnings), como variáveis não utilizadas, queries não otimizadas e violações de boas práticas?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "A aba TrueChange no painel inferior do Service Studio compila o código continuamente e exibe a lista de Errors (vermelhos) que impedem publicação e Warnings (amarelos) que indicam melhorias e riscos de performance.",
+      "orderIndex": 84,
+      "options": [
+        {
+          "text": "Service Center Dashboard",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Aba TrueChange",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "App Feedback",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Compare and Merge Tool",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Erros de JavaScript e falhas de renderização de widgets no navegador do cliente são registrados automaticamente nos logs de Database Exceptions do Service Center.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. Erros locais de JavaScript no cliente ficam nos consoles dos navegadores (F12) ou na aba de Logs de Mobile/Reactive no Service Center, e não na categoria de Database Exceptions.",
+      "orderIndex": 85,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Em um fluxo de lógica com múltiplos manipuladores de exceção (Exception Handlers), qual é a regra de precedência quando uma exceção é disparada?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "A plataforma busca o manipulador mais específico para o tipo de erro ocorrido (ex: Database Exception). Se não houver manipulador específico, a exceção é capturada pelo manipulador genérico \"All Exceptions\".",
+      "orderIndex": 86,
+      "options": [
+        {
+          "text": "O primeiro handler desenhado na tela sempre executa, independente do tipo de erro",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "O manipulador mais específico para o tipo da exceção é executado; se não existir, executa o handler \"All Exceptions\"",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Todos os handlers conectados são executados em paralelo",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "O handler All Exceptions roda primeiro e depois repassa para o específico",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Quando uma exceção é tratada por um Exception Handler com a propriedade \"Abort Transaction = No\", as alterações feitas no banco de dados até o momento do erro são confirmadas (commit).",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. Se \"Abort Transaction\" for \"No\", a transação não sofre rollback forçado pelo handler. Se o fluxo subsequente concluir com sucesso, as operações anteriores podem ser persistidas.",
+      "orderIndex": 87,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Para interromper propositalmente um fluxo de negócios quando uma regra é violada (ex: \"Saldo Insuficiente\") e exibir mensagem ao usuário, qual elemento deve ser utilizado?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "O elemento \"Raise Exception\" configurado com uma User Exception personalizada (ex: SaldoInsuficienteException) interrompe a execução normal e desvia o fluxo para o manipulador correspondente.",
+      "orderIndex": 88,
+      "options": [
+        {
+          "text": "Nó Breakpoint",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Nó Raise Exception com uma User Exception personalizada",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Nó End com valor de retorno falso",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Nó Destination para a tela inicial",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Uma User Exception criada em um módulo de lógica de negócio Core pode ser marcada como pública e capturada por handlers específicos em módulos da camada End-User.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. User Exceptions podem ser configuradas com \"Public = Yes\", permitindo que módulos consumidores criem manipuladores dedicados para tratar cada tipo de erro de negócio.",
+      "orderIndex": 89,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Em uma Client Action, se uma exceção ocorrer e não houver nenhum Exception Handler no fluxo da ação nem na Screen, onde a exceção é finalmente capturada?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "A exceção sobe na pilha de execução até ser capturada pelo fluxo global \"OnException\" do módulo (localizado no Common flow), que exibe a mensagem de erro padrão da aplicação.",
+      "orderIndex": 90,
+      "options": [
+        {
+          "text": "O navegador trava e fecha a aba do usuário",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "No manipulador global \"OnException\" do módulo, que trata erros não capturados",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "No banco de dados através de um trigger de auditoria",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "A requisição é reiniciada automaticamente em loop infinito",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Em uma tela com um formulário de cadastro, como o desenvolvedor verifica programaticamente se todos os campos vinculados ao formulário passaram nas validações automáticas (tipos e campos obrigatórios)?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "A propriedade booleana Form.Valid é avaliada como True apenas se todos os widgets de entrada associados ao formulário estiverem com suas respectivas propriedades Valid == True.",
+      "orderIndex": 91,
+      "options": [
+        {
+          "text": "Testando se cada Input.Text != \"\" individualmente",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Verificando a propriedade FormName.Valid através de um nó If",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Invocando a Server Action ValidateForm(FormName)",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Consultando a variável de sessão Session.FormIsValid",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Ao definir \"Input_Email.Valid = False\" e \"Input_Email.ValidationMessage = 'E-mail inválido'\", o widget Input associado exibe visualmente a borda vermelha e a mensagem de erro configurada.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. Em Reactive Web Apps, modificar a propriedade Valid de um widget de entrada para False faz com que a plataforma aplique as classes CSS de erro e renderize a ValidationMessage abaixo do campo.",
+      "orderIndex": 92,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Qual das opções descreve a melhor prática recomendada para validação de dados em formulários de negócio críticos?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Validações no cliente proporcionam feedback imediato e boa experiência de usuário (UX). No entanto, validações de integridade, formatos e regras de negócio no servidor são indispensáveis para garantir a segurança dos dados.",
+      "orderIndex": 93,
+      "options": [
+        {
+          "text": "Validar apenas no cliente para economizar processamento do servidor",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Realizar validações imediatas na Client Action para feedback rápido ao usuário E validar novamente os dados na Server Action para garantir a segurança e integridade",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Confiar exclusivamente em validações visuais com JavaScript externo",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Nunca usar Built-in Validations do OutSystems",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Se um formulário possui \"Form.Valid = False\", a chamada a uma Server Action dentro da Client Action é bloqueada automaticamente pelo compilador.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. O compilador não bloqueia chamadas a Server Actions. Se o desenvolvedor não colocar a verificação \"If Form.Valid\" antes de chamar a Server Action, os dados inválidos serão enviados para o servidor.",
+      "orderIndex": 94,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Para resetar o estado de validação de um formulário e limpar todas as mensagens de erro exibidas ao usuário, qual é o procedimento correto?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Atribuir Form.Valid = True e redefinir a propriedade Valid de cada widget de entrada para True (ou limpar os campos da variável vinculada ao formulário) restaura o estado limpo dos campos.",
+      "orderIndex": 95,
+      "options": [
+        {
+          "text": "Recarregar todo o navegador com JavaScript window.location.reload()",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Atribuir True às propriedades Valid dos widgets de entrada e do formulário (ou redefinir a variável fonte do formulário)",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Excluir o formulário do DOM e recriá-lo via script",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Desinstalar o módulo e publicar novamente",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Qual widget é o mais indicado no OutSystems para exibir uma lista de opções onde o usuário deve selecionar exatamente uma única opção entre poucas opções visíveis na tela (ex: 2 ou 3 opções)?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "O widget Radio Group (contendo Radio Buttons) é o componente recomendado de UX para seleção única entre um número reduzido de alternativas visíveis simultaneamente. Para muitas opções, o Dropdown é mais indicado.",
+      "orderIndex": 96,
+      "options": [
+        {
+          "text": "Checkbox Group",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Radio Group com Radio Buttons",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Input do tipo Text com máscara",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Switch Button múltiplo",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Em um widget Dropdown em Reactive Web, a propriedade \"Options\" deve ser vinculada a uma lista e as propriedades \"Options Value\" e \"Options Text\" definem respectivamente o identificador armazenado e o texto visível.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. O Dropdown recebe a lista fonte em \"Options\", a expressão do valor persistido na variável em \"Options Value\" e a expressão que o usuário enxerga em \"Options Text\".",
+      "orderIndex": 97,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Qual widget de layout é utilizado para agrupar outros widgets, aplicar classes CSS de estilo e definir estruturas responsivas em colunas no OutSystems?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "O Container (que renderiza uma tag <div> no HTML) é o bloco estrutural básico do OutSystems para agrupamento, formatação, visibilidade condicional e aplicação de classes de estilo e grid.",
+      "orderIndex": 98,
+      "options": [
+        {
+          "text": "Expression",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Container",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Label",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Placeholder",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "O widget Expression com a propriedade \"Escape Content = No\" renderiza código HTML fornecido diretamente no DOM sem sanitização contra ataques de Cross-Site Scripting (XSS).",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. Quando \"Escape Content\" é definido como \"No\", a plataforma não escapa caracteres como < e >, permitindo a injeção de HTML/scripts. Isso exige extrema cautela e sanitização prévia para evitar vulnerabilidades de segurança (XSS).",
+      "orderIndex": 99,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Em uma tela de dashboard, um desenvolvedor aplica as funções Group By no atributo ProductCategory e Count no identificador ProductId dentro de um Aggregate. Ao tentar vincular uma expressão da tela ao atributo ProductName da entidade Product, o Service Studio exibe um erro de compilação. Qual é a causa técnica desse erro?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Quando qualquer operação de agregação ou agrupamento (Group By, Count, Sum, etc.) é introduzida em um Aggregate, o resultado passa a expor unicamente os atributos agrupados e as colunas calculadas. Todos os outros atributos originais da entidade (como ProductName) deixam de estar disponíveis no Record resultante da query SQL.",
+      "orderIndex": 100,
+      "options": [
+        {
+          "text": "O desenvolvedor esqueceu de marcar o atributo ProductName como público no módulo Core.",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Ao aplicar agrupamento ou agregação em um Aggregate, apenas os atributos agrupados e as colunas calculadas passam a existir no resultado.",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "O Aggregate requer um índice composto pré-existente no banco de dados para liberar atributos não agrupados.",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "O widget Expression só aceita valores numéricos quando a entidade possui a função Count ativa.",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "O uso de funções de manipulação de texto como Substr() ou Index() diretamente dentro da cláusula de filtro de um Aggregate impede o uso de índices B-Tree padrão no banco de dados, resultando em varredura completa da tabela (Full Table Scan).",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. A aplicação de funções escalares (como Substr ou Index) sobre colunas de tabelas na cláusula WHERE inviabiliza o aproveitamento direto de índices existentes sobre a coluna original no SGBD, forçando a leitura linha a linha da tabela.",
+      "orderIndex": 101,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Durante a iteração de uma lista de registros retornada por um Aggregate dentro de um For Each em uma Server Action, qual propriedade indica precisamente a posição (índice baseado em zero) do elemento atualmente processado no ciclo?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "A propriedade List.CurrentRowNumber fornece o índice baseado em zero da linha atualmente percorrida no For Each. Já List.Current aponta para os valores do registro corrente e List.Length expressa a quantidade total de itens na lista.",
+      "orderIndex": 102,
+      "options": [
+        {
+          "text": "GetUsers.List.Current.Id",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "GetUsers.List.CurrentIndex",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "text": "GetUsers.List.CurrentRowNumber",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "text": "GetUsers.List.RowPosition",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Se um Aggregate for executado dentro de uma Server Action interna e apenas 3 dos seus 20 atributos forem utilizados nas etapas subsequentes da lógica, o compilador da plataforma otimiza a consulta SQL gerada, projetando apenas esses 3 atributos.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. O mecanismo de compilação da plataforma analisa a árvore de uso dos dados em todo o escopo da Server Action e restringe a projeção do SELECT no banco apenas aos atributos efetivamente consumidos.",
+      "orderIndex": 103,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Ao executar um Timer de Bootstrap de dados que processa uma planilha de 80.000 linhas, o processo é abortado repentinamente sem concluir a carga completa. Ao analisar o Service Center, verifica-se uma mensagem de Timeout. Qual é a causa e a arquitetura recomendada para solucionar este problema?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Por padrão, os Timers do OutSystems possuem um tempo limite de execução (geralmente 20 minutos). Para importações massivas, a boa prática é processar em lotes (chunks) controlados por limite de tempo, salvando o progresso (ex: última linha lida) e disparando o próprio Timer novamente via ação WakeTimer antes de atingir o timeout.",
+      "orderIndex": 104,
+      "options": [
+        {
+          "text": "O limite físico de linhas do Excel no OutSystems é 65.536; deve-se obrigatoriamente converter o arquivo para CSV.",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "O Timer atingiu seu tempo limite de execução (timeout padrão de 20 minutos); deve-se implementar processamento em lotes com persistência de estado e auto-reativação via WakeTimer.",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "O Service Center encerrou o processo porque Timers não possuem permissão de escrita em entidades normais.",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "A ação Excel To Record List bloqueia o banco de dados; deve-se substituir por chamadas assíncronas de API REST.",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Caso ocorra uma exceção não tratada dentro de um Timer de Bootstrap durante a iteração de um lote de 500 registros, todas as inserções realizadas anteriormente em iterações que executaram a ação CommitTransaction permanecem gravadas com sucesso no banco de dados.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. A execução da ação CommitTransaction efetiva definitivamente as transações pendentes no banco de dados. Um erro subsequente não tratado provocará rollback apenas das operações executadas após o último ponto de commit.",
+      "orderIndex": 105,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Durante a importação de uma planilha Excel com a ação nativa Excel To Record List, uma coluna de data contém células sem preenchimento. Qual valor o OutSystems atribui ao atributo de data no Record resultante?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "No OutSystems, datas nulas ou vazias recebem o valor padrão NullDate(), que equivale tecnicamente ao valor 1900-01-01 00:00:00.",
+      "orderIndex": 106,
+      "options": [
+        {
+          "text": "Dispara imediatamente uma exceção do tipo InvalidArgumentException.",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Grava o valor NULL nativo do banco de dados relacional.",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "text": "Atribui o valor correspondente a NullDate() (1900-01-01).",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "text": "Atribui a data e hora do momento da importação (CurrDateTime()).",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Considere uma Tela que contém um Bloco reutilizável. O Bloco possui um parâmetro de entrada cujo valor depende do resultado de um Aggregate configurado com \"Fetch = At start\" na Tela. Qual é a sequência cronológica correta de eventos de ciclo de vida durante o carregamento inicial?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Primeiro são executados os On Initialize (da Tela e do Bloco). Em seguida, os elementos visuais são montados, disparando On Ready (do Bloco e da Tela). Quando o Aggregate conclui a busca no servidor, o valor do parâmetro é fornecido ao Bloco, disparando então o evento On Parameters Changed do Bloco.",
+      "orderIndex": 107,
+      "options": [
+        {
+          "text": "On Ready (Tela) -> On Initialize (Bloco) -> On Parameters Changed (Bloco) -> On Ready (Bloco)",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "On Initialize (Tela) e On Initialize (Bloco) -> On Ready (Bloco) e On Ready (Tela) -> On Parameters Changed (Bloco, quando os dados do Aggregate chegarem)",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "On Parameters Changed (Bloco) -> On Initialize (Tela) -> On Ready (Tela) -> On After Fetch (Aggregate)",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "O evento On Parameters Changed nunca é disparado na carga inicial, apenas em cliques do usuário.",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "É uma boa prática manipular o DOM de um elemento visual via JavaScript diretamente no manipulador do evento On Initialize de uma Tela.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. No evento On Initialize, a renderização da interface e a árvore do DOM ainda não foram construídas. Qualquer tentativa de localizar ou manipular elementos por ID nesse momento resultará em erro (elemento nulo ou inexistente). Essa manipulação deve ser feita no On Ready.",
+      "orderIndex": 108,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Um desenvolvedor adiciona um event listener global em window via JavaScript customizado dentro do On Ready de um Bloco. Para evitar vazamento de memória (memory leaks) e comportamentos inesperados ao navegar entre telas, onde o listener deve ser obrigatoriamente removido?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "O manipulador do evento On Destroy do Bloco é o local obrigatório e apropriado para desalocar recursos, cancelar timers de JavaScript e remover event listeners globais criados na janela ou no documento.",
+      "orderIndex": 109,
+      "options": [
+        {
+          "text": "No evento On Parameters Changed.",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "No evento On After Fetch do Aggregate principal.",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "text": "No evento On Destroy do Bloco.",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "text": "O navegador desaloca automaticamente todos os listeners de window ao destruir o Bloco.",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Ao alterar o valor de uma variável local na Tela que está vinculada como Input Parameter de um Bloco, o evento On Parameters Changed do Bloco é disparado automaticamente se o novo valor for diferente do anterior.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. O mecanismo de reatividade do OutSystems monitora as entradas dos Blocos. Quando o valor atribuído a um Input Parameter é alterado e difere do valor anterior, o evento On Parameters Changed é invocado.",
+      "orderIndex": 110,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Em uma aplicação reativa, uma Client Action invoca uma Server Action passando uma lista de 5.000 itens complexos como parâmetro de entrada apenas para validar um único campo de texto. Qual é o principal impacto técnico dessa abordagem?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Em Reactive Apps, a comunicação entre o navegador e o servidor ocorre via requisições HTTP REST com payload serializado em JSON. A passagem de grandes estruturas de dados aumenta substancialmente a latência de rede, o consumo de banda e o processamento de serialização/deserialização.",
+      "orderIndex": 111,
+      "options": [
+        {
+          "text": "Causa um deadlock permanente nas conexões do banco de dados do servidor.",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Eleva desnecessariamente a latência e o consumo de dados devido à serialização e transferência via rede de um payload JSON de grande porte.",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "A plataforma aborta imediatamente a compilação, pois listas não podem ser passadas para Server Actions.",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Nenhum impacto, pois a plataforma passa os parâmetros entre cliente e servidor por referência de memória compartilhada.",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "A função integrada GetUserId() pode ser utilizada tanto em Client Actions quanto em Server Actions, retornando em ambas o identificador do usuário autenticado na sessão atual.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. A função GetUserId() é suportada no escopo cliente e servidor em aplicações Reactive, retornando o ID do usuário atualmente autenticado (ou NullIdentifier() para usuários anônimos).",
+      "orderIndex": 112,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Uma Client Action precisa gravar dados em quatro entidades distintas chamando quatro Server Actions independentes sequencialmente. Qual refatoração é recomendada pela OutSystems para otimizar desempenho e integridade?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Chamar quatro Server Actions a partir do cliente gera quatro roundtrips HTTP distintos, aumentando a latência e deixando o sistema vulnerável a falhas parciais (falha no 3º roundtrip deixa os dois primeiros gravados sem rollback conjunto). Criar uma única Server Action orquestradora no servidor reduz as requisições a um único roundtrip e executa todas as gravações na mesma transação.",
+      "orderIndex": 113,
+      "options": [
+        {
+          "text": "Substituir as quatro Server Actions por chamadas paralelas com JavaScript assíncrono (Promise.all).",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Encapsular as quatro gravações em uma única Server Action no servidor, reduzindo roundtrips HTTP e garantindo controle transacional unificado.",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Executar cada Server Action dentro de um loop For Each na Client Action.",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Converter as entidades em Static Entities para permitir gravação direta no cliente.",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Cada invocação de uma Server Action a partir de uma Client Action é executada em uma transação de banco de dados isolada no servidor, sendo feito o commit automático ao final da execução da ação.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. Cada chamada de Server Action vinda do cliente constitui uma requisição HTTP independente. O servidor abre uma transação para a requisição e, caso finalize sem exceções não tratadas, efetua o commit automático ao término.",
+      "orderIndex": 114,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Em aplicações Reactive Web Apps, onde os valores das Client Variables ficam fisicamente armazenados no cliente e qual restrição de segurança é mandatória?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Em Reactive Web, as Client Variables são salvas no armazenamento local do navegador (Local Storage). Como qualquer usuário pode inspecionar e alterar esses dados via DevTools, informações sensíveis (chaves secretas, senhas, papéis administrativos ou dados confidenciais) nunca devem ser gravadas nelas.",
+      "orderIndex": 115,
+      "options": [
+        {
+          "text": "Ficam criptografadas em memória protegida de hardware, sendo seguras para armazenamento de senhas.",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Ficam no Local Storage do navegador; por serem vulneráveis à inspeção e manipulação pelo usuário, nunca devem armazenar dados sensíveis ou de autorização crítica.",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Ficam armazenadas na sessão de cache do IIS/Nginx do servidor de frontend.",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Ficam em cookies com a flag HttpOnly habilitada por padrão pelo Service Studio.",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Uma Client Variable configurada em uma aplicação Reactive Web compartilha seu valor de forma sincronizada e persistente entre abas abertas no mesmo navegador do usuário.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. Como as Client Variables utilizam o Local Storage do browser (com escopo delimitado pela origem e pelo aplicativo), as abas do mesmo navegador e mesma aplicação acessam e atualizam o mesmo repositório de valores.",
+      "orderIndex": 116,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Quando o usuário realiza logout na aplicação por meio da Server Action nativa User_Logout, qual é o comportamento padrão das Client Variables?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Ao invocar o User_Logout, a sessão no servidor é terminada e as Client Variables da aplicação são automaticamente resetadas para seus valores padrão (Default Values), evitando que o próximo usuário veja dados do usuário anterior.",
+      "orderIndex": 117,
+      "options": [
+        {
+          "text": "Permanecem intactas com os últimos valores preenchidos no Local Storage indefinidamente.",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Todas as Client Variables são resetadas para seus respectivos valores padrão (Default Value).",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "O navegador limpa todo o cache e histórico de navegação forçando o fechamento da aba.",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "As variáveis numéricas tornam-se nulas e as textuais viram \"LOGGED_OUT\".",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "De acordo com a Architecture Canvas (framework 4-Layer) da OutSystems, qual tipo de dependência entre módulos representa uma violação direta de boas práticas arquiteturais?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Dependências ascendentes (Upward References) — como um módulo da camada Foundation consumindo um elemento da camada Core ou End-User — e dependências circulares diretas ou indiretas entre módulos violam gravemente os princípios da Architecture Canvas.",
+      "orderIndex": 118,
+      "options": [
+        {
+          "text": "Um módulo End-User consumindo uma Server Action pública de um módulo Core.",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Um módulo Core consumindo uma biblioteca reutilizável da camada Foundation.",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "text": "Um módulo da camada Foundation consumindo uma Entidade de negócio de um módulo da camada Core (Upward Reference).",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "text": "Dois módulos End-User consumindo o mesmo tema visual da camada Foundation.",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Ao alterar a assinatura de uma Server Action pública adicionando um novo parâmetro de entrada obrigatório (Mandatory = Yes), os módulos consumidores que não forem atualizados continuarão funcionando em produção sem apresentar falhas.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. Adicionar um parâmetro obrigatório quebra a compatibilidade binária e lógica da assinatura pública (Breaking Change). Os módulos consumidores que não forem atualizados falharão em tempo de execução ao tentar invocar a ação desatualizada.",
+      "orderIndex": 119,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "No Service Studio, ao abrir a janela \"Manage Dependencies\", um desenvolvedor nota que uma dependência está sinalizada com um ícone de exclamação vermelho. O que esse alerta indica?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "O ícone vermelho de dependência incompatível (Incompatible Dependency) significa que o módulo produtor sofreu alterações de assinatura ou elementos foram removidos/renomeados, tornando a dependência quebrada até que seja atualizada e o código ajustado.",
+      "orderIndex": 120,
+      "options": [
+        {
+          "text": "O módulo produtor está em manutenção temporária no LifeTime.",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Existe uma quebra de compatibilidade (Incompatible Dependency) decorrente de alterações de assinatura ou exclusão de elementos no módulo produtor.",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "O desenvolvedor não possui permissões de leitura no módulo consumidor.",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "O módulo atingiu o limite de licenças da Software Unit (SU).",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Quando uma Entidade possui a propriedade \"Expose Read Only = Yes\", outros módulos consumidores continuam habilitados a executar as Entity Actions Create, Update e Delete diretamente.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. Com \"Expose Read Only = Yes\", a plataforma oculta e bloqueia as Entity Actions de modificação (Create, Update, Delete) para todos os módulos consumidores, permitindo apenas operações de leitura (Get e Aggregates). Para alterar dados, o módulo produtor deve fornecer Server Actions públicas específicas.",
+      "orderIndex": 121,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Em uma Static Entity com a coluna \"Is_Active\", o desenvolvedor altera o registro \"Pendente\" para Is_Active = False. Qual é o efeito prático dessa alteração?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Desativar um registro em uma Static Entity não remove o registro do banco de dados nem quebra chaves estrangeiras existentes; o registro continua existindo, porém pode ser filtrado ou omitido em novas seleções de formulários.",
+      "orderIndex": 122,
+      "options": [
+        {
+          "text": "O registro é excluído fisicamente e todas as chaves estrangeiras associadas recebem NullIdentifier().",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "O registro permanece na tabela mantendo a integridade referencial dos dados históricos, mas pode ser desconsiderado em novas operações da aplicação.",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "O Service Studio gera um erro de integridade referencial que impede a publicação do módulo.",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "O identificador do registro é resetado para zero em todas as tabelas filhas.",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "A plataforma OutSystems remove imediatamente as colunas físicas da tabela no banco de dados corporativo assim que o desenvolvedor exclui um atributo de uma Entidade no Service Studio e clica no botão 1-Click Publish.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. Por razões de segurança e prevenção contra perda acidental de dados legados, o compilador da plataforma não exclui fisicamente colunas nem tabelas no banco de dados. O atributo é removido do modelo lógico no Service Studio, mas a coluna permanece no SGBD.",
+      "orderIndex": 123,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Qual é o impacto direto da criação de múltiplos Índices (Indexes) em uma Entidade com alto volume de gravações e atualizações contínuas?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Embora índices acelerem consultas de leitura (SELECT), cada operação de escrita (INSERT, UPDATE, DELETE) exige que o SGBD atualize a estrutura de todas as árvores de índices correspondentes, aumentando o tempo e o custo de transação de escrita.",
+      "orderIndex": 124,
+      "options": [
+        {
+          "text": "As operações de leitura ficam mais lentas e as de escrita mais rápidas.",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Acelera as operações de leitura que utilizam esses atributos, porém reduz a performance das operações de escrita (Create e Update) devido à sobrecarga de manutenção dos índices.",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Desabilita o mecanismo de cache automático da plataforma para a Entidade.",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Exige que todos os atributos indexados sejam obrigatoriamente do tipo Text.",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Static Entities geram identificadores automáticos baseados em GUIDs não textuais que mudam a cada ambiente da esteira (Dev, Test, Prod), impedindo seu uso em regras de negócio constantes.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. As Static Entities no OutSystems são criadas com identificadores estáveis (frequentemente representados por constantes ou identificadores do tipo Text ou Integer definidos no design) que mantêm exatamente a mesma chave entre diferentes ambientes de publicação.",
+      "orderIndex": 125,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Um Bloco filho está contido dentro de um Bloco intermediário, que por sua vez está instanciado em uma Tela. O Bloco filho precisa enviar um dado para a Tela principal. Como a comunicação entre os componentes deve ser modelada?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Blocos em OutSystems não possuem \"Event Bubbling\" automático. O Bloco filho deve disparar seu Evento com o parâmetro; o Bloco intermediário captura esse evento em seu Handler e, por sua vez, dispara seu próprio Evento para que a Tela principal possa capturá-lo.",
+      "orderIndex": 126,
+      "options": [
+        {
+          "text": "O Bloco filho utiliza a função global BroadcastEvent() que entrega a mensagem diretamente à Tela sem passar pelo intermediário.",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "O Bloco filho dispara um Evento tratado pelo Bloco intermediário, e este dispara seu próprio Evento com o dado repassado para a Tela principal.",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "O Bloco filho deve gravar o dado em uma Static Entity para que a Tela o consulte via Aggregate.",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Blocos aninhados não suportam envio de eventos para elementos externos.",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "O manipulador (Handler) de um Evento de Bloco definido em uma Tela é implementado por meio de uma Client Action da própria Tela.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. Quando um Bloco define um Evento, a Tela que o consome mapeia esse evento para uma Client Action local (Handler), que recebe os parâmetros fornecidos pelo Bloco e executa a lógica desejada na interface.",
+      "orderIndex": 127,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Um desenvolvedor cria um componente modal de confirmação dentro de um Bloco reutilizável. Ao clicar no botão \"Confirmar\", qual mecanismo o Bloco deve empregar para notificar a Tela consumidora e fechar o modal?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "A boa prática de encapsulamento exige que o Bloco dispare um Evento (ex: Confirmed) com os parâmetros necessários. A Tela consumidora captura o evento no seu Handler e atualiza as variáveis de controle de visibilidade da UI.",
+      "orderIndex": 128,
+      "options": [
+        {
+          "text": "Alterar diretamente uma variável local da Tela consumidora usando uma expressão JavaScript.",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Disparar um Evento do Bloco para que a Tela consumidora execute o fluxo correspondente no seu Handler.",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Executar um Destination para redirecionar para a própria tela atual.",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Chamar a Server Action User_GetUnifiedLoginInfo.",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "É possível disparar um Evento de um Bloco de dentro do manipulador do evento On Destroy do próprio Bloco para notificar a Tela de que o componente foi desmontado.",
+      "type": "TRUE_FALSE",
+      "explanation": "Errado. O manipulador de evento On Destroy não permite o disparo de Eventos de Bloco, pois o componente já se encontra no processo de destruição e desconexão do ciclo de vida da interface.",
+      "orderIndex": 129,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": true,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Em uma tela de edição complexa, há uma seção expansível (Accordion) secundária que raramente é consultada pelos usuários, contendo uma tabela pesada. Qual configuração de Aggregate deve ser adotada para otimizar a velocidade de carregamento inicial da página?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Definir a propriedade Fetch = Only on demand faz com que o Aggregate não seja disparado na carga inicial da tela. Os dados só são requisitados ao servidor quando o usuário interagir e abrir o Accordion, disparando a ação Refresh Data apenas no momento oportuno.",
+      "orderIndex": 130,
+      "options": [
+        {
+          "text": "Configurar o Aggregate com \"Fetch = At start\" e Max Records = 10.000.",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Configurar o Aggregate com \"Fetch = Only on demand\" e dispará-lo através da ação Refresh Data quando o usuário abrir o Accordion.",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Converter a seção em um Bloco e deixar todos os Aggregates como At start.",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Substituir o Aggregate por uma Client Variable carregada no On Initialize da Tela.",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Quando uma Tela possui dois Aggregates e uma Data Action, todos configurados com \"Fetch = At start\", a plataforma executa as requisições em paralelo no servidor durante o carregamento inicial da tela.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. Em Reactive Web Apps, as fontes de dados com \"Fetch = At start\" disparam chamadas assíncronas em paralelo em direção ao servidor para minimizar o tempo de carregamento global da tela.",
+      "orderIndex": 131,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Um desenvolvedor adiciona uma lógica no evento On Initialize de uma Tela tentando ler o valor de GetCustomerById.List.Current.Customer.Name de um Aggregate com \"Fetch = At start\". O que ocorrerá na execução da página?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "O evento On Initialize ocorre antes do disparo e retorno das chamadas assíncronas de busca de dados no servidor. Portanto, na execução do On Initialize, o Aggregate ainda não retornou registros, resultando no valor padrão (vazio/nulo) para a expressão.",
+      "orderIndex": 132,
+      "options": [
+        {
+          "text": "O On Initialize aguarda o término do Aggregate automaticamente antes de rodar.",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "A lista do Aggregate estará vazia (ou com valor padrão), pois os dados do servidor ainda não foram obtidos no momento em que o On Initialize é executado.",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "A plataforma gera uma exceção de compilação bloqueando a publicação.",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "O valor da Client Variable correspondente será automaticamente injetado.",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "O nó Refresh Data em uma Client Action pode ser utilizado para recarregar tanto Aggregates de tela quanto Data Actions.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. O elemento Refresh Data suporta a seleção de Aggregates e Data Actions locais da Tela/Bloco, solicitando uma nova busca atualizada de dados no servidor.",
+      "orderIndex": 133,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Um usuário está na página 8 de uma tabela de pedidos e digita um termo no campo de busca que retorna apenas 3 registros no total. Se a lógica da tela não resetar o StartIndex para 0, qual será o resultado visual para o usuário?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Se o usuário estava na página 8 (ex: StartIndex = 70 com Max Records = 10) e a busca retorna apenas 3 itens no total, a consulta buscará registros a partir do índice 70. Como existem apenas 3 registros, a tabela aparecerá vazia com a mensagem de Empty State, mesmo existindo correspondências válidas.",
+      "orderIndex": 134,
+      "options": [
+        {
+          "text": "A tabela exibe automaticamente os 3 registros na página 1 ajustando o StartIndex por conta própria.",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "A tabela aparecerá vazia, pois o StartIndex permaneceu maior que o número total de registros retornados pela nova pesquisa.",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "O navegador exibirá uma tela de erro 500 do servidor.",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "O widget Pagination dispara uma exceção do tipo IndexOutOfRangeException.",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Em uma tabela paginada com ordenação dinâmica, a propriedade Dynamic Sort do Aggregate aceita uma expressão de texto como \"Customer.Name DESC\" para ordenar as linhas consultadas no banco de dados.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. O Dynamic Sort permite passar uma expressão de texto contendo a entidade, atributo e a direção (ASC ou DESC), sendo traduzido de forma segura para a cláusula ORDER BY da consulta SQL.",
+      "orderIndex": 135,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Ao utilizar o widget Pagination em conjunto com uma Table, quais propriedades mínimas são essenciais para manter a sincronização correta da paginação?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "O widget Pagination requer StartIndex (índice inicial da página atual), MaxRecords (limite de linhas por página) e TotalCount (contagem total de registros retornada pela propriedade .Count do Aggregate) e um manipulador de evento On Navigate para atualizar a variável de StartIndex.",
+      "orderIndex": 136,
+      "options": [
+        {
+          "text": "RowNumber, LineCount e TotalPages.",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "StartIndex, MaxRecords, TotalCount e um manipulador no evento On Navigate.",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Apenas a lista retornada pelo Aggregate (GetOrders.List).",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "CurrentPage, LimitPerPage e PageSize.",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Para implementar paginação infinita (Infinite Scroll) em telas móveis e reativas, deve-se vincular a busca de mais registros ao evento On Scroll Ending do widget de lista.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. O evento On Scroll Ending é disparado quando o usuário atinge o final da visualização da lista, momento propício para incrementar a quantidade de registros e carregar o próximo lote de dados.",
+      "orderIndex": 137,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Em um modelo de dados, a Entidade OrderItem possui uma chave estrangeira para ProductId com a propriedade \"Delete Rule\" configurada como \"Protect\". O que acontece quando uma Server Action executa a ação DeleteProduct para um produto que possui itens de pedido associados?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Com Delete Rule = \"Protect\", o banco de dados e a plataforma impedem a exclusão do registro pai enquanto houver filhos vinculados, abortando a transação e disparando uma DatabaseException.",
+      "orderIndex": 138,
+      "options": [
+        {
+          "text": "O produto é excluído e todos os OrderItems associados são excluídos em cascata.",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "O produto é excluído e a coluna ProductId nos OrderItems associados é preenchida com NullIdentifier().",
+          "isCorrect": false,
+          "orderIndex": 1
+        },
+        {
+          "text": "A operação falha, abortando a exclusão e disparando uma DatabaseException por violação de integridade referencial protegida.",
+          "isCorrect": true,
+          "orderIndex": 2
+        },
+        {
+          "text": "A operação ignora os registros filhos e marca o produto como inativo.",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Para criar uma relação 1 para 1 (One-to-One) entre duas Entidades (ex: User e UserProfile), o tipo de dados do atributo identificador da entidade UserProfile deve ser configurado como User Identifier.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. Definir o identificador (Primary Key) da entidade secundária como o tipo Identifier da entidade primária estabelece uma relação rigorosa de 1 para 1 no modelo de dados do OutSystems.",
+      "orderIndex": 139,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Qual é o risco de configurar a Delete Rule de uma chave estrangeira como \"Ignore\" em um banco de dados relacional?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "A regra \"Ignore\" remove o registro pai sem verificar nem atualizar os registros filhos, criando registros órfãos que apontam para uma chave inexistente, comprometendo a integridade referencial.",
+      "orderIndex": 140,
+      "options": [
+        {
+          "text": "Impede que o registro pai seja atualizado.",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Gera registros órfãos nas entidades dependentes que referenciam chaves de registros que já não existem no banco de dados.",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Força a exclusão imediata de todas as tabelas do catálogo do módulo.",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Obriga a execução manual de reindexação do banco após cada exclusão.",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Um desenvolvedor adiciona uma validação de Role em uma Client Action para exibir ou ocultar um botão de exclusão de dados confidenciais. No entanto, a Server Action invocada pela exclusão não verifica a Role do usuário. Qual é o problema de segurança dessa implementação?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "A validação em Client Actions atende puramente à experiência do usuário (UX), pois todo código cliente pode ser contornado ou inspecionado. A Server Action no backend é a única autoridade real de segurança e deve obrigatoriamente validar as permissões (ex: CheckRole) antes de executar operações restritas.",
+      "orderIndex": 141,
+      "options": [
+        {
+          "text": "Não há problema, pois o Service Studio bloqueia requisições HTTP do cliente automaticamente caso o botão esteja oculto.",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "A segurança no cliente é meramente cosmética; um usuário mal-intencionado pode disparar a chamada de rede diretamente ao endpoint da Server Action sem passar pela validação visual.",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "O Service Center desativa a aplicação por violação de protocolo de rede.",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "A Client Action não compila quando contém validações de Role.",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "A função Check<Role>Role (ex: CheckUserManagerRole) executada diretamente em uma Client Action faz uma requisição ao servidor para verificar se o usuário possui a referida permissão.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. Em Reactive Web Apps, as Roles do usuário residem na sessão do servidor. A execução de uma ação de checagem de Role no cliente realiza uma chamada remota transparente para validar as permissões.",
+      "orderIndex": 142,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Ao criar uma nova Tela em um módulo Reactive Web, quais Roles vêm marcadas por padrão nas propriedades de segurança da Tela?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Por padrão, novas Telas criadas no OutSystems recebem a Role \"Registered\" marcada, garantindo que apenas usuários autenticados tenham acesso inicial à tela.",
+      "orderIndex": 143,
+      "options": [
+        {
+          "text": "Nenhuma Role (acesso anônimo público irrestrito).",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Apenas a Role \"Registered\" (exige que o usuário esteja autenticado).",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Apenas a Role \"Administrator\".",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Todas as Roles existentes no módulo.",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Se uma Tela possuir todas as Roles desmarcadas nas suas propriedades, ela se torna acessível por qualquer usuário sem necessidade de autenticação (acesso anônimo).",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. Se nem a Role Registered nem nenhuma Role customizada estiver marcada, a Tela é tratada como pública, permitindo que usuários anônimos a visualizem.",
+      "orderIndex": 144,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Em uma Server Action que executa várias operações no banco de dados, ocorre um erro inesperado que é capturado por um manipulador All Exceptions configurado com \"Abort Transaction = No\". Qual é a consequência nas operações anteriores ao erro?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Quando \"Abort Transaction = No\", a plataforma não realiza o rollback automático da transação atual. As operações de banco de dados executadas com sucesso antes do ponto de exceção serão confirmadas (commit) ao término do fluxo.",
+      "orderIndex": 145,
+      "options": [
+        {
+          "text": "Todas as operações sofrem rollback obrigatório independentemente da configuração.",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "As operações no banco de dados executadas antes do disparo da exceção não sofrem rollback e serão confirmadas se o fluxo terminar sem novas exceções.",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "O banco de dados trava a tabela inteira até que o servidor IIS seja reiniciado.",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "A exceção é reencaminhada automaticamente para a tela do usuário.",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Se um nó Raise Exception for executado dentro de uma Server Action, o fluxo normal é interrompido imediatamente e o controle é transferido para o Exception Handler compatível mais próximo na cadeia de chamadas.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. O elemento Raise Exception encerra a execução lógica normal do fluxo e propaga a exceção informada para o manipulador correspondente mais próximo no escopo.",
+      "orderIndex": 146,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    },
+    {
+      "statement": "Uma Server Action itera 100 registros com um For Each. No 40º registro ocorre um erro de banco de dados (DatabaseException). Não há nenhum Exception Handler na ação. Qual é o estado final dos 39 registros gravados anteriormente?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Quando uma exceção não é tratada localmente por nenhum manipulador dentro da Server Action, a transação é abortada e todas as operações de escrita realizadas durante a execução daquela requisição sofrem rollback integral no banco de dados.",
+      "orderIndex": 147,
+      "options": [
+        {
+          "text": "Os 39 registros continuam gravados no banco de dados com commit parcial.",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Todos os 39 registros sofrem rollback integral e nenhuma gravação daquela Server Action permanece no banco.",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Apenas o 40º registro é ignorado e os 60 restantes são processados.",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Os registros anteriores são convertidos em rascunhos temporários.",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Ao clicar em um botão com a propriedade \"Built-in Validations = Yes\" dentro de um Form, quais validações a plataforma OutSystems realiza automaticamente antes de iniciar a execução da Client Action?",
+      "type": "MULTIPLE_CHOICE",
+      "explanation": "Com Built-in Validations = Yes, a plataforma verifica se os campos marcados como Mandatory possuem valor preenchido e se os dados informados são compatíveis com os tipos de dados dos inputs (ex: números válidos, datas válidas). Caso haja violação, define os atributos .Valid como False e exibe as mensagens padrão sem executar a lógica principal do desenvolvedor.",
+      "orderIndex": 148,
+      "options": [
+        {
+          "text": "Validação de regras de negócio em chamadas REST externas e verificação de duplicidade de CPF/CNPJ no banco.",
+          "isCorrect": false,
+          "orderIndex": 0
+        },
+        {
+          "text": "Preenchimento de campos obrigatórios (Mandatory) e conformidade dos tipos de dados básicos de cada input.",
+          "isCorrect": true,
+          "orderIndex": 1
+        },
+        {
+          "text": "Verificação de integridade referencial de chaves estrangeiras no banco de dados.",
+          "isCorrect": false,
+          "orderIndex": 2
+        },
+        {
+          "text": "Validação de autenticidade do certificado SSL e do token de sessão.",
+          "isCorrect": false,
+          "orderIndex": 3
+        }
+      ]
+    },
+    {
+      "statement": "Ao atribuir programaticamente Input_Email.Valid = False e uma mensagem em Input_Email.ValidationMessage dentro de uma Client Action, a propriedade Form.Valid é automaticamente recalculada pela plataforma como False.",
+      "type": "TRUE_FALSE",
+      "explanation": "Certo. A propriedade Form.Valid é reativa e derivada: se qualquer widget de entrada contido no formulário tiver sua propriedade .Valid alterada para False, Form.Valid assume automaticamente o valor False.",
+      "orderIndex": 149,
+      "options": [
+        {
+          "text": "Certo",
+          "isCorrect": true,
+          "orderIndex": 0
+        },
+        {
+          "text": "Errado",
+          "isCorrect": false,
+          "orderIndex": 1
+        }
+      ]
+    }
+  ]
+}

@@ -16,11 +16,34 @@ export interface QuestionDTO {
   options: OptionDTO[];
 }
 
+export interface FolderDTO {
+  id?: string;
+  name: string;
+  color?: string | null;
+  icon?: string | null;
+  isPinned?: boolean;
+}
+
+export interface FolderSummary {
+  id: string;
+  name: string;
+  color: string | null;
+  icon: string | null;
+  isPinned: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  examCount: number;
+}
+
 export interface ExamDTO {
   id?: string;
   title: string;
   description?: string | null;
   category?: string | null;
+  folderId?: string | null;
+  isPinned?: boolean;
+  icon?: string | null;
+  imageUrl?: string | null;
   questions: QuestionDTO[];
 }
 
@@ -29,6 +52,11 @@ export interface ExamSummaryItem {
   title: string;
   description: string | null;
   category: string | null;
+  folderId: string | null;
+  folderName: string | null;
+  isPinned: boolean;
+  icon: string | null;
+  imageUrl: string | null;
   createdAt: Date;
   updatedAt: Date;
   questionCount: number;
@@ -51,6 +79,7 @@ export interface AttemptResultDetail {
   totalQuestions: number;
   percentage: number;
   finishedAt: Date | null;
+  durationSeconds?: number;
   questions: {
     id: string;
     statement: string;

@@ -7,7 +7,9 @@ import {
   RotateCcw,
   Home,
   TrendingUp,
+  Timer,
 } from 'lucide-react';
+import { formatTimeVerbose } from '../exam-player/exam-timer';
 
 interface ScoreHeaderProps {
   examId: string;
@@ -16,6 +18,7 @@ interface ScoreHeaderProps {
   totalQuestions: number;
   percentage: number;
   finishedAt: Date | null;
+  durationSeconds?: number;
 }
 
 export function ScoreHeader({
@@ -25,6 +28,7 @@ export function ScoreHeader({
   totalQuestions,
   percentage,
   finishedAt,
+  durationSeconds,
 }: ScoreHeaderProps) {
   const incorrectCount = totalQuestions - totalScore;
 
@@ -118,7 +122,13 @@ export function ScoreHeader({
       </div>
 
       {/* Métricas Quantitativas */}
-      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div
+        className={`mt-6 grid grid-cols-1 gap-4 ${
+          typeof durationSeconds === 'number'
+            ? 'sm:grid-cols-2 lg:grid-cols-4'
+            : 'sm:grid-cols-3'
+        }`}
+      >
         <div className="flex items-center gap-4 rounded-2xl border border-zinc-200 bg-zinc-50/60 p-4 dark:border-zinc-800 dark:bg-zinc-950/40">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400">
             <CheckCircle2 className="h-5 w-5" />
@@ -160,6 +170,22 @@ export function ScoreHeader({
             </p>
           </div>
         </div>
+
+        {typeof durationSeconds === 'number' && (
+          <div className="flex items-center gap-4 rounded-2xl border border-zinc-200 bg-zinc-50/60 p-4 dark:border-zinc-800 dark:bg-zinc-950/40">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-100 text-violet-600 dark:bg-violet-950/60 dark:text-violet-400">
+              <Timer className="h-5 w-5" />
+            </div>
+            <div>
+              <span className="font-mono text-xl font-bold text-zinc-900 dark:text-zinc-100">
+                {formatTimeVerbose(durationSeconds)}
+              </span>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                Tempo de Prova
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -34,6 +34,7 @@ export default async function ExamResultsPage({ params }: ResultsPageProps) {
         totalQuestions={result.totalQuestions}
         percentage={result.percentage}
         finishedAt={result.finishedAt}
+        durationSeconds={result.durationSeconds}
       />
 
       {/* Seção de Revisão Questão a Questão */}

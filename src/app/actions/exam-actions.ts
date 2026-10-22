@@ -21,10 +21,21 @@ function safeRevalidatePath(path: string) {
 /**
  * Obtém todos os simulados cadastrados com resumo da última tentativa.
  */
-export async function getExams(): Promise<ExamSummaryItem[]> {
+export async function getExams(folderId?: string): Promise<ExamSummaryItem[]> {
+  const whereClause = folderId !== undefined ? { folderId } : {};
+
   const exams = await prisma.exam.findMany({
-    orderBy: { createdAt: 'desc' },
+    where: whereClause,
+    orderBy: [
+      { isPinned: 'desc' },
+      { createdAt: 'desc' },
+    ],
     include: {
+      folder: {
+        select: {
+          name: true,
+        },
+      },
       _count: {
         select: { questions: true },
       },
@@ -75,6 +86,11 @@ export async function getExams(): Promise<ExamSummaryItem[]> {
       title: exam.title,
       description: exam.description,
       category: exam.category,
+      folderId: exam.folderId,
+      folderName: exam.folder?.name ?? null,
+      isPinned: exam.isPinned,
+      icon: exam.icon,
+      imageUrl: exam.imageUrl,
       createdAt: exam.createdAt,
       updatedAt: exam.updatedAt,
       questionCount: exam._count.questions,
@@ -193,7 +209,7 @@ export async function saveExamAction(
       };
     }
 
-    const { title, description, category, questions } = validated.data;
+    const { title, description, category, folderId, isPinned, icon, imageUrl, questions } = validated.data;
 
     const result = await prisma.$transaction(async (tx) => {
       let targetId = examId;
@@ -206,6 +222,10 @@ export async function saveExamAction(
             title,
             description,
             category,
+            folderId: folderId ?? null,
+            isPinned: isPinned ?? false,
+            icon: icon ?? null,
+            imageUrl: imageUrl ?? null,
           },
         });
 
@@ -220,6 +240,10 @@ export async function saveExamAction(
             title,
             description,
             category,
+            folderId: folderId ?? null,
+            isPinned: isPinned ?? false,
+            icon: icon ?? null,
+            imageUrl: imageUrl ?? null,
           },
         });
         targetId = newExam.id;
@@ -291,7 +315,8 @@ export async function deleteExamAction(
 export async function submitExamAttemptAction(
   examId: string,
   answers: Record<string, string>, // questionId -> selectedOptionId
-  questionIds?: string[]
+  questionIds?: string[],
+  durationSeconds?: number
 ): Promise<{ success: boolean; attemptId?: string; error?: string }> {
   try {
     const exam = await prisma.exam.findUnique({
@@ -320,12 +345,19 @@ export async function submitExamAttemptAction(
     const { score, total, answersDetail } = calculateScore(questionsToEvaluate, answers);
 
     const attempt = await prisma.$transaction(async (tx) => {
+      const finishedAt = new Date();
+      const startedAt =
+        typeof durationSeconds === 'number' && durationSeconds >= 0
+          ? new Date(finishedAt.getTime() - durationSeconds * 1000)
+          : new Date();
+
       const createdAttempt = await tx.examAttempt.create({
         data: {
           examId,
           totalScore: score,
           totalQuestions: total,
-          finishedAt: new Date(),
+          startedAt,
+          finishedAt,
         },
       });
 
@@ -396,6 +428,16 @@ export async function getAttemptResult(
       ? Math.round((attempt.totalScore / attempt.totalQuestions) * 100)
       : 0;
 
+  let durationSeconds: number | undefined;
+  if (attempt.finishedAt && attempt.startedAt) {
+    durationSeconds = Math.max(
+      0,
+      Math.round(
+        (attempt.finishedAt.getTime() - attempt.startedAt.getTime()) / 1000
+      )
+    );
+  }
+
   return {
     attemptId: attempt.id,
     examId: attempt.examId,
@@ -404,6 +446,7 @@ export async function getAttemptResult(
     totalQuestions: attempt.totalQuestions,
     percentage,
     finishedAt: attempt.finishedAt,
+    durationSeconds,
     questions: sortedAnswers.map((ans) => ({
       id: ans.question.id,
       statement: ans.question.statement,
@@ -421,3 +464,156 @@ export async function getAttemptResult(
     })),
   };
 }
+
+/**
+ * Pastas: Listar todas as pastas com contagem de simulados
+ */
+export async function getFolders() {
+  const folders = await prisma.folder.findMany({
+    orderBy: [
+      { isPinned: 'desc' },
+      { name: 'asc' },
+    ],
+    include: {
+      _count: {
+        select: { exams: true },
+      },
+    },
+  });
+
+  return folders.map((f) => ({
+    id: f.id,
+    name: f.name,
+    color: f.color,
+    icon: f.icon,
+    isPinned: f.isPinned,
+    createdAt: f.createdAt,
+    updatedAt: f.updatedAt,
+    examCount: f._count.exams,
+  }));
+}
+
+/**
+ * Pastas: Criar ou editar pasta
+ */
+export async function saveFolderAction(data: {
+  id?: string;
+  name: string;
+  color?: string | null;
+  icon?: string | null;
+  isPinned?: boolean;
+}) {
+  try {
+    if (!data.name || data.name.trim().length < 2) {
+      return { success: false, error: 'O nome da pasta deve ter pelo menos 2 caracteres.' };
+    }
+
+    if (data.id) {
+      const updated = await prisma.folder.update({
+        where: { id: data.id },
+        data: {
+          name: data.name.trim(),
+          color: data.color ?? null,
+          icon: data.icon ?? null,
+          isPinned: data.isPinned ?? false,
+        },
+      });
+      safeRevalidatePath('/');
+      return { success: true, folder: updated };
+    } else {
+      const created = await prisma.folder.create({
+        data: {
+          name: data.name.trim(),
+          color: data.color ?? null,
+          icon: data.icon ?? null,
+          isPinned: data.isPinned ?? false,
+        },
+      });
+      safeRevalidatePath('/');
+      return { success: true, folder: created };
+    }
+  } catch (error: unknown) {
+    console.error('Erro ao salvar pasta:', error);
+    return { success: false, error: 'Erro ao salvar a pasta no banco de dados.' };
+  }
+}
+
+/**
+ * Pastas: Excluir pasta (os simulados pertencentes passam a ter folderId null)
+ */
+export async function deleteFolderAction(folderId: string) {
+  try {
+    await prisma.folder.delete({
+      where: { id: folderId },
+    });
+    safeRevalidatePath('/');
+    return { success: true };
+  } catch (error: unknown) {
+    console.error('Erro ao excluir pasta:', error);
+    return { success: false, error: 'Não foi possível excluir a pasta.' };
+  }
+}
+
+/**
+ * Alterna estado de fixado de um simulado no topo
+ */
+export async function togglePinExamAction(examId: string) {
+  try {
+    const exam = await prisma.exam.findUnique({
+      where: { id: examId },
+      select: { isPinned: true },
+    });
+    if (!exam) return { success: false, error: 'Simulado não encontrado' };
+
+    const updated = await prisma.exam.update({
+      where: { id: examId },
+      data: { isPinned: !exam.isPinned },
+    });
+    safeRevalidatePath('/');
+    return { success: true, isPinned: updated.isPinned };
+  } catch (error: unknown) {
+    console.error('Erro ao fixar/desafixar simulado:', error);
+    return { success: false, error: 'Erro ao alterar fixação do simulado.' };
+  }
+}
+
+/**
+ * Alterna estado de fixado de uma pasta no topo
+ */
+export async function togglePinFolderAction(folderId: string) {
+  try {
+    const folder = await prisma.folder.findUnique({
+      where: { id: folderId },
+      select: { isPinned: true },
+    });
+    if (!folder) return { success: false, error: 'Pasta não encontrada' };
+
+    const updated = await prisma.folder.update({
+      where: { id: folderId },
+      data: { isPinned: !folder.isPinned },
+    });
+    safeRevalidatePath('/');
+    return { success: true, isPinned: updated.isPinned };
+  } catch (error: unknown) {
+    console.error('Erro ao fixar/desafixar pasta:', error);
+    return { success: false, error: 'Erro ao alterar fixação da pasta.' };
+  }
+}
+
+/**
+ * Move um simulado para dentro de uma pasta (ou remove da pasta)
+ */
+export async function moveExamToFolderAction(examId: string, folderId: string | null) {
+  try {
+    await prisma.exam.update({
+      where: { id: examId },
+      data: { folderId },
+    });
+    safeRevalidatePath('/');
+    return { success: true };
+  } catch (error: unknown) {
+    console.error('Erro ao mover simulado para pasta:', error);
+    return { success: false, error: 'Erro ao mover simulado.' };
+  }
+}
+

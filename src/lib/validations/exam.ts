@@ -52,15 +52,28 @@ export const questionSchema = z
     }
   });
 
+export const folderSchema = z.object({
+  id: z.string().optional(),
+  name: z.string().min(2, 'O nome da pasta deve ter pelo menos 2 caracteres.'),
+  color: z.string().optional().nullable(),
+  icon: z.string().optional().nullable(),
+  isPinned: z.boolean().optional().default(false),
+});
+
 export const examSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(3, 'O título do simulado deve ter pelo menos 3 caracteres.'),
   description: z.string().optional().nullable(),
   category: z.string().optional().nullable(),
+  folderId: z.string().optional().nullable(),
+  isPinned: z.boolean().optional().default(false),
+  icon: z.string().optional().nullable(),
+  imageUrl: z.string().optional().nullable(),
   questions: z.array(questionSchema).min(1, 'O simulado deve conter pelo menos 1 questão.'),
 });
 
-export type ExamInput = z.infer<typeof examSchema>;
+export type FolderInput = z.input<typeof folderSchema>;
+export type ExamInput = z.input<typeof examSchema>;
 export type QuestionInput = z.infer<typeof questionSchema>;
 export type OptionInput = z.infer<typeof optionSchema>;
 

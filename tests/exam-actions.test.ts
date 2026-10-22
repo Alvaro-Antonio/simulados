@@ -242,3 +242,57 @@ test('Integration: calculates attempt count, average score, and latest score in 
 
   await deleteExamAction(examId);
 });
+
+test('Integration: saves and calculates durationSeconds accurately in exam attempt', async () => {
+  const examInput = {
+    title: 'Simulado com Cronômetro',
+    category: 'Testes',
+    description: 'Teste de cálculo de tempo',
+    questions: [
+      {
+        statement: 'Quanto é 2 + 2?',
+        type: 'MULTIPLE_CHOICE' as const,
+        orderIndex: 0,
+        options: [
+          { text: '4', isCorrect: true, orderIndex: 0 },
+          { text: '5', isCorrect: false, orderIndex: 1 },
+        ],
+      },
+    ],
+  };
+
+  const createRes = await saveExamAction(examInput);
+  assert.equal(createRes.success, true);
+  const examId = createRes.examId!;
+
+  const examDb = await prisma.exam.findUnique({
+    where: { id: examId },
+    include: { questions: { include: { options: true } } },
+  });
+  const q = examDb!.questions[0];
+  const correctOpt = q.options.find((o) => o.isCorrect)!.id;
+
+  // Submete simulado com 145 segundos (2 min e 25s) decorridos
+  const submitRes = await submitExamAttemptAction(
+    examId,
+    { [q.id]: correctOpt },
+    [q.id],
+    145
+  );
+  assert.equal(submitRes.success, true);
+  assert.ok(submitRes.attemptId);
+
+  const result = await getAttemptResult(submitRes.attemptId!);
+  assert.ok(result);
+  assert.equal(result.totalScore, 1);
+  assert.equal(result.percentage, 100);
+  assert.ok(result.durationSeconds !== undefined);
+  // Deve ser aproximadamente 145 segundos (+/- 2 segundos por tolerância de execução)
+  assert.ok(
+    Math.abs(result.durationSeconds! - 145) <= 2,
+    `Duration should be ~145s, got ${result.durationSeconds}`
+  );
+
+  await deleteExamAction(examId);
+});
+

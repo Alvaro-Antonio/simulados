@@ -16,9 +16,39 @@ import {
   Shuffle,
   X,
   Sparkles,
+  Pin,
+  GraduationCap,
+  Code,
+  Scale,
+  Calculator,
+  BookOpen,
+  Stethoscope,
+  Globe,
 } from 'lucide-react';
 import { ExamSummaryItem } from '@/lib/types';
-import { deleteExamAction } from '@/app/actions/exam-actions';
+import { deleteExamAction, togglePinExamAction } from '@/app/actions/exam-actions';
+
+function renderExamIcon(icon?: string | null) {
+  switch (icon) {
+    case 'code':
+      return <Code className="h-5 w-5" />;
+    case 'scale':
+      return <Scale className="h-5 w-5" />;
+    case 'calculator':
+      return <Calculator className="h-5 w-5" />;
+    case 'book-open':
+      return <BookOpen className="h-5 w-5" />;
+    case 'stethoscope':
+      return <Stethoscope className="h-5 w-5" />;
+    case 'globe':
+      return <Globe className="h-5 w-5" />;
+    case 'award':
+      return <Award className="h-5 w-5" />;
+    case 'graduation-cap':
+    default:
+      return <GraduationCap className="h-5 w-5" />;
+  }
+}
 
 interface ExamCardProps {
   exam: ExamSummaryItem;
@@ -78,11 +108,37 @@ export function ExamCard({ exam }: ExamCardProps) {
         <div>
           {/* Header com Categoria e Ações */}
           <div className="flex items-center justify-between gap-2">
-            <span className="inline-flex items-center rounded-md bg-indigo-50 px-2.5 py-1 text-xs font-medium text-indigo-700 dark:bg-indigo-950/50 dark:text-indigo-300">
-              {exam.category || 'Geral'}
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center rounded-md bg-indigo-50 px-2.5 py-1 text-xs font-medium text-indigo-700 dark:bg-indigo-950/50 dark:text-indigo-300">
+                {exam.category || 'Geral'}
+              </span>
+
+              {exam.folderName && (
+                <span className="inline-flex items-center gap-1 rounded-md bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300">
+                  📁 {exam.folderName}
+                </span>
+              )}
+            </div>
 
             <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => {
+                  startTransition(async () => {
+                    await togglePinExamAction(exam.id);
+                  });
+                }}
+                title={exam.isPinned ? 'Desafixar do topo' : 'Fixar no topo'}
+                disabled={isPending}
+                className={`rounded-lg p-1.5 transition-colors ${
+                  exam.isPinned
+                    ? 'text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-950/40'
+                    : 'text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800 dark:hover:text-zinc-200'
+                }`}
+              >
+                <Pin className={`h-4 w-4 ${exam.isPinned ? 'fill-current rotate-45' : ''}`} />
+              </button>
+
               <Link
                 href={`/exams/${exam.id}/edit`}
                 title="Editar simulado e questões"
@@ -135,16 +191,37 @@ export function ExamCard({ exam }: ExamCardProps) {
             </div>
           )}
 
-          {/* Título e Descrição */}
-          <h3 className="mt-3 text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-            {exam.title}
-          </h3>
-
-          {exam.description && (
-            <p className="mt-1 line-clamp-2 text-sm text-zinc-500 dark:text-zinc-400">
-              {exam.description}
-            </p>
-          )}
+          {/* Título, Ícone e Descrição */}
+          <div className="mt-3 flex items-start gap-3">
+            {exam.imageUrl ? (
+              <img
+                src={exam.imageUrl}
+                alt={exam.title}
+                className="h-10 w-10 shrink-0 rounded-xl object-cover border border-zinc-200 dark:border-zinc-700"
+              />
+            ) : (
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 dark:bg-indigo-950/60 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900">
+                {renderExamIcon(exam.icon)}
+              </div>
+            )}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <h3 className="text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 truncate">
+                  {exam.title}
+                </h3>
+                {exam.isPinned && (
+                  <span className="shrink-0 rounded-md bg-amber-50 px-1.5 py-0.5 text-[10px] font-bold text-amber-600 dark:bg-amber-950/60 dark:text-amber-400 border border-amber-200 dark:border-amber-800">
+                    Fixado
+                  </span>
+                )}
+              </div>
+              {exam.description && (
+                <p className="mt-1 line-clamp-2 text-sm text-zinc-500 dark:text-zinc-400">
+                  {exam.description}
+                </p>
+              )}
+            </div>
+          </div>
 
           {/* Metadados: Questões e Data */}
           <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-zinc-500 dark:text-zinc-400">
