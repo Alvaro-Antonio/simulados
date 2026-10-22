@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../data/repositories/exam_repository.dart';
 import '../../../domain/models/exam_models.dart';
 import '../exam_form/exam_form_view.dart';
@@ -227,6 +227,48 @@ class _DashboardViewState extends State<DashboardView> {
     }
   }
 
+  Future<void> _openInstagram() async {
+    final nativeUri = Uri.parse('instagram://user?username=hakaishin.dev');
+    final webUri = Uri.parse('https://instagram.com/hakaishin.dev');
+
+    try {
+      final launched = await launchUrl(
+        nativeUri,
+        mode: LaunchMode.externalApplication,
+      );
+      if (launched) return;
+    } catch (_) {}
+
+    try {
+      await launchUrl(
+        webUri,
+        mode: LaunchMode.externalApplication,
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Não foi possível abrir o Instagram: $e')),
+        );
+      }
+    }
+  }
+
+  Future<void> _openGitHub() async {
+    final webUri = Uri.parse('https://github.com/Alvaro-Antonio');
+    try {
+      await launchUrl(
+        webUri,
+        mode: LaunchMode.externalApplication,
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Não foi possível abrir o GitHub: $e')),
+        );
+      }
+    }
+  }
+
   void _showAboutDialog() {
     showDialog(
       context: context,
@@ -272,101 +314,107 @@ class _DashboardViewState extends State<DashboardView> {
                 style: TextStyle(fontSize: 13, height: 1.4),
               ),
               const SizedBox(height: 18),
-              // GitHub Card
+              // Botão Instagram Direto
               InkWell(
-                onTap: () {
-                  Clipboard.setData(const ClipboardData(text: 'https://github.com/Alvaro-Antonio'));
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Link do GitHub copiado para a área de transferência!')),
-                  );
-                },
-                borderRadius: BorderRadius.circular(12),
+                onTap: _openInstagram,
+                borderRadius: BorderRadius.circular(14),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? const Color(0xFF1E293B)
-                        : const Color(0xFFF1F5F9),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? const Color(0xFF334155)
-                          : const Color(0xFFE2E8F0),
+                    gradient: LinearGradient(
+                      colors: [
+                        const Color(0xFF833AB4).withValues(alpha: 0.08),
+                        const Color(0xFFFD1D1D).withValues(alpha: 0.08),
+                        const Color(0xFFFCB045).withValues(alpha: 0.08),
+                      ],
                     ),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: const Color(0xFFE1306C).withValues(alpha: 0.35)),
                   ),
-                  child: const Row(
+                  child: Row(
                     children: [
-                      Icon(Icons.code_rounded, size: 20, color: Color(0xFF4F46E5)),
-                      SizedBox(width: 10),
-                      Expanded(
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFF833AB4), Color(0xFFFD1D1D), Color(0xFFFCB045)],
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Icon(Icons.camera_alt_rounded, size: 18, color: Colors.white),
+                      ),
+                      const SizedBox(width: 12),
+                      const Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'GitHub',
-                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                              '@hakaishin.dev',
+                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              'github.com/Alvaro-Antonio',
+                              'Toque para abrir no Instagram',
                               style: TextStyle(fontSize: 11, color: Color(0xFF64748B)),
                             ),
                           ],
                         ),
                       ),
-                      Icon(Icons.copy_rounded, size: 16, color: Color(0xFF94A3B8)),
+                      const Icon(Icons.open_in_new_rounded, size: 18, color: Color(0xFFE1306C)),
                     ],
                   ),
                 ),
               ),
               const SizedBox(height: 10),
-              // Instagram Card
+              // Botão GitHub Direto
               InkWell(
-                onTap: () {
-                  Clipboard.setData(const ClipboardData(text: 'https://instagram.com/hakaishin.dev'));
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Instagram @hakaishin.dev copiado para a área de transferência!')),
-                  );
-                },
-                borderRadius: BorderRadius.circular(12),
+                onTap: _openGitHub,
+                borderRadius: BorderRadius.circular(14),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   decoration: BoxDecoration(
                     color: Theme.of(context).brightness == Brightness.dark
                         ? const Color(0xFF1E293B)
                         : const Color(0xFFF1F5F9),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(14),
                     border: Border.all(
                       color: Theme.of(context).brightness == Brightness.dark
                           ? const Color(0xFF334155)
-                          : const Color(0xFFE2E8F0),
+                          : const Color(0xFFCBD5E1),
                     ),
                   ),
-                  child: const Row(
+                  child: Row(
                     children: [
-                      Icon(Icons.camera_alt_outlined, size: 20, color: Color(0xFFE1306C)),
-                      SizedBox(width: 10),
-                      Expanded(
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF0F172A),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Icon(Icons.code_rounded, size: 18, color: Colors.white),
+                      ),
+                      const SizedBox(width: 12),
+                      const Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Instagram',
-                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                              'github.com/Alvaro-Antonio',
+                              style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              '@hakaishin.dev',
+                              'Toque para abrir no GitHub',
                               style: TextStyle(fontSize: 11, color: Color(0xFF64748B)),
                             ),
                           ],
                         ),
                       ),
-                      Icon(Icons.copy_rounded, size: 16, color: Color(0xFF94A3B8)),
+                      const Icon(Icons.open_in_new_rounded, size: 18, color: Color(0xFF64748B)),
                     ],
                   ),
                 ),
               ),
               const SizedBox(height: 16),
-              // AI Attribution note
+              // Nota de atribuição IA
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
