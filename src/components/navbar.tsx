@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { BookOpenCheck, PlusCircle, Sparkles } from 'lucide-react';
+import { BookOpenCheck, PlusCircle } from 'lucide-react';
+import { AboutDevModal } from './about-dev-modal';
 
 export function Navbar() {
   return (
@@ -29,6 +30,7 @@ export function Navbar() {
           >
             Painel Geral
           </Link>
+          <AboutDevModal />
           <Link
             href="/exams/new"
             className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-all hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 active:scale-98"
