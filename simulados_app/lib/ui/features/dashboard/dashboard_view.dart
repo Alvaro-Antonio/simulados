@@ -800,53 +800,72 @@ class _DashboardViewState extends State<DashboardView> {
                 // Linha superior: Categoria, Pasta, Pin e Menu
                 Row(
                   children: [
-                    // Categoria
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF4F46E5).withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        exam.category ?? 'Geral',
-                        style: const TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF4F46E5),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-
-                    // Pasta
-                    if (exam.folderName != null)
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                        decoration: BoxDecoration(
-                          color: isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.folder_rounded, size: 12, color: Color(0xFF64748B)),
-                            const SizedBox(width: 4),
-                            Text(
-                              exam.folderName!,
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600,
-                                color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                    Expanded(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Categoria
+                          Flexible(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF4F46E5).withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text(
+                                exam.category ?? 'Geral',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF4F46E5),
+                                ),
+                              ),
+                            ),
+                          ),
+                          if (exam.folderName != null) ...[
+                            const SizedBox(width: 6),
+                            // Pasta
+                            Flexible(
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                decoration: BoxDecoration(
+                                  color: isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(Icons.folder_rounded, size: 12, color: Color(0xFF64748B)),
+                                    const SizedBox(width: 4),
+                                    Flexible(
+                                      child: Text(
+                                        exam.folderName!,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w600,
+                                          color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],
-                        ),
+                        ],
                       ),
-
-                    const Spacer(),
+                    ),
+                    const SizedBox(width: 4),
 
                     // Botão Pin
                     IconButton(
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+                      visualDensity: VisualDensity.compact,
                       icon: Icon(
                         exam.isPinned ? Icons.push_pin_rounded : Icons.push_pin_outlined,
                         size: 18,
@@ -858,6 +877,8 @@ class _DashboardViewState extends State<DashboardView> {
 
                     // Menu Mais Opções
                     PopupMenuButton<String>(
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
                       icon: const Icon(Icons.more_vert, size: 18),
                       onSelected: (val) {
                         if (val == 'edit') _onEditExam(exam);
@@ -974,71 +995,95 @@ class _DashboardViewState extends State<DashboardView> {
                   child: Column(
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           // Banco de Questões
-                          Row(
-                            children: [
-                              const Icon(Icons.help_outline_rounded, size: 14, color: Color(0xFF6366F1)),
-                              const SizedBox(width: 5),
-                              Text(
-                                '${exam.questionCount} no banco',
-                                style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
-                              ),
-                            ],
+                          Expanded(
+                            child: Row(
+                              children: [
+                                const Icon(Icons.help_outline_rounded, size: 14, color: Color(0xFF6366F1)),
+                                const SizedBox(width: 5),
+                                Expanded(
+                                  child: Text(
+                                    '${exam.questionCount} no banco',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
+                          const SizedBox(width: 8),
                           // Tentativas
-                          Row(
-                            children: [
-                              const Icon(Icons.history_rounded, size: 14, color: Color(0xFF0EA5E9)),
-                              const SizedBox(width: 5),
-                              Text(
-                                exam.attemptsCount > 0 ? '${exam.attemptsCount} tentativa(s)' : 'Sem tentativas',
-                                style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
-                              ),
-                            ],
+                          Expanded(
+                            child: Row(
+                              children: [
+                                const Icon(Icons.history_rounded, size: 14, color: Color(0xFF0EA5E9)),
+                                const SizedBox(width: 5),
+                                Expanded(
+                                  child: Text(
+                                    exam.attemptsCount > 0 ? '${exam.attemptsCount} tentativa(s)' : 'Sem tentativas',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
                       const SizedBox(height: 6),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           // Média de Acerto
-                          Row(
-                            children: [
-                              const Icon(Icons.analytics_outlined, size: 14, color: Color(0xFF10B981)),
-                              const SizedBox(width: 5),
-                              Text(
-                                exam.averagePercentage != null ? 'Média: ${exam.averagePercentage}%' : 'Média: --',
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.bold,
-                                  color: exam.averagePercentage != null && exam.averagePercentage! >= 70
-                                      ? const Color(0xFF10B981)
-                                      : const Color(0xFFF59E0B),
+                          Expanded(
+                            child: Row(
+                              children: [
+                                const Icon(Icons.analytics_outlined, size: 14, color: Color(0xFF10B981)),
+                                const SizedBox(width: 5),
+                                Expanded(
+                                  child: Text(
+                                    exam.averagePercentage != null ? 'Média: ${exam.averagePercentage}%' : 'Média: --',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.bold,
+                                      color: exam.averagePercentage != null && exam.averagePercentage! >= 70
+                                          ? const Color(0xFF10B981)
+                                          : const Color(0xFFF59E0B),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
+                          const SizedBox(width: 8),
                           // Última Nota
-                          Row(
-                            children: [
-                              const Icon(Icons.emoji_events_outlined, size: 14, color: Color(0xFFF59E0B)),
-                              const SizedBox(width: 5),
-                              Text(
-                                exam.latestAttempt != null
-                                    ? 'Última: ${exam.latestAttempt!.percentage}% (${exam.latestAttempt!.totalScore}/${exam.latestAttempt!.totalQuestions})'
-                                    : 'Última: --',
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.bold,
-                                  color: exam.latestAttempt != null && exam.latestAttempt!.percentage >= 70
-                                      ? const Color(0xFF10B981)
-                                      : const Color(0xFFF59E0B),
+                          Expanded(
+                            child: Row(
+                              children: [
+                                const Icon(Icons.emoji_events_outlined, size: 14, color: Color(0xFFF59E0B)),
+                                const SizedBox(width: 5),
+                                Expanded(
+                                  child: Text(
+                                    exam.latestAttempt != null
+                                        ? 'Última: ${exam.latestAttempt!.percentage}% (${exam.latestAttempt!.totalScore}/${exam.latestAttempt!.totalQuestions})'
+                                        : 'Última: --',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.bold,
+                                      color: exam.latestAttempt != null && exam.latestAttempt!.percentage >= 70
+                                          ? const Color(0xFF10B981)
+                                          : const Color(0xFFF59E0B),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ],
                       ),
